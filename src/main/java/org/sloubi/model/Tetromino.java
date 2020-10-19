@@ -7,32 +7,32 @@ public enum Tetromino {
             {1, 0},
             {1, 1},
             {0, 1}
-        }, 2, new Color(249, 65, 68)),
+        }, 2, new Color(66, 182, 66)),
     ZShape(new int[][] {
             {1, 1, 0},
             {0, 1, 1},
-        }, 2, new Color(243, 114, 44)),
+        }, 2, new Color(239, 32, 41)),
     TShape(new int[][] {
             {0, 1, 0},
             {1, 1, 1}
-        }, 4, new Color(248, 150, 30)),
+        }, 4, new Color(173, 77, 156)),
     LShape(new int[][] {
             {1, 0},
             {1, 0},
             {1, 1}
-        }, 4, new Color(249, 132, 74)),
+        }, 4, new Color(239, 121, 33)),
     MirroredLShape(new int[][] {
             {0, 1},
             {0, 1},
             {1, 1}
-        }, 4, new Color(249, 199, 79)),
+        }, 4, new Color(90, 101, 173)),
     LineShape(new int[][] {
             {1, 1, 1, 1},
-        }, 2, new Color(144, 190, 109)),
+        }, 2, new Color(49, 199, 239)),
     SquareShape(new int[][] {
             {1, 1},
             {1, 1},
-        }, 1, new Color(67, 170, 139)),
+        }, 1, new Color(247, 211, 8)),
     VShape(new int[][] {
             {1, 0, 1},
             {0, 1, 0},

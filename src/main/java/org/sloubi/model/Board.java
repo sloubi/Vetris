@@ -1,6 +1,6 @@
 package org.sloubi.model;
 
-import org.sloubi.view.MainFrame;
+import org.sloubi.App;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class Board implements ActionListener {
 
     // Statuts du jeu
     public enum GameState {
-        InGame("En jeu"), Paused("Pause"), Over("Perdu");
+        InGame("In game"), Paused("Paused"), Over("Game Over");
         String name;
 
         GameState(String name) {
@@ -165,8 +165,8 @@ public class Board implements ActionListener {
         }
 
         if (nbOfFullLines == 4) {
-            MainFrame.clipWow.setFramePosition(0);
-            MainFrame.clipWow.start();
+            App.wowClip.setFramePosition(0);
+            App.wowClip.start();
         }
 
         increaseScore(nbOfFullLines);
@@ -373,13 +373,11 @@ public class Board implements ActionListener {
         gameTimer.stop();
         clockTimer.stop();
 
-        for (BoardListener listener : listeners) {
-            listener.stateChanged();
-        }
-
         // Animation de fin
         endX = 0;
         endY = getHeight() - 1;
+
+        endTimer.setCoalesce(false);
         endTimer.start();
 
         handleHighScore();
@@ -436,8 +434,7 @@ public class Board implements ActionListener {
      * Animation de fin
      */
     private void fillBoard() {
-        map[endY][endX].setState(Square.State.Filled);
-        map[endY][endX].setColor(new Color(50, 50, 50));
+        map[endY][endX].setState(Square.State.End);
 
         for (BoardListener listener : listeners) {
             listener.boardChanged();
@@ -445,6 +442,10 @@ public class Board implements ActionListener {
 
         if (endY == 0 && endX == getWidth() - 1) {
             endTimer.stop();
+
+            for (BoardListener listener : listeners) {
+                listener.stateChanged();
+            }
         }
         else if (endX ==  getWidth() - 1) {
             endX = 0;

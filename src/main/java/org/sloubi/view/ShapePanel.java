@@ -1,23 +1,25 @@
 package org.sloubi.view;
 
-import javax.swing.*;
 import org.sloubi.model.Shape;
 
+import javax.swing.*;
 import java.awt.*;
 
-public class ShapePanel extends JPanel {
+public class ShapePanel extends JPanel implements SquareDrawer {
     private Shape shape;
     private final int squareSize;
+    private final int borderSize;
 
-    public ShapePanel(Shape shape, int squareSize) {
+    public ShapePanel(Shape shape, int squareSize, int borderSize) {
         this.shape = shape;
         this.squareSize = squareSize;
+        this.borderSize = borderSize;
 
         setOpaque(false);
 
         // La taille du shapePanel ne change jamais
         // Elle correspond à la taille de la pièce la plus grande dans les 2 sens
-        setPreferredSize(new Dimension(4 * squareSize + 8, 4 * squareSize + 8));
+        setPreferredSize(new Dimension(4 * squareSize + 4 * borderSize, 4 * squareSize + 4 * borderSize));
     }
 
     @Override
@@ -25,35 +27,19 @@ public class ShapePanel extends JPanel {
         super.paintComponent(g);
 
         // Dimension de la pièce
-        int shapeWidth = shape.getWidth() * squareSize + 2 * shape.getWidth();
-        int shapeHeight = shape.getHeight() * squareSize + 2 * shape.getHeight();
+        int shapeWidth = shape.getWidth() * squareSize + borderSize * shape.getWidth();
+        int shapeHeight = shape.getHeight() * squareSize + borderSize * shape.getHeight();
 
         // Pour centrer la pièce
-        int startX = (getWidth() - shapeWidth) / 2;
-        int startY = (getHeight() - shapeHeight) / 2;
+        int offsetX = (getWidth() - shapeWidth) / 2;
+        int offsetY = (getHeight() - shapeHeight) / 2;
 
         Graphics2D g2 = (Graphics2D) g;
-        Rectangle rect;
-        GradientPaint gp;
 
         for (int y = 0; y < shape.getHeight(); y++) {
             for (int x = 0; x < shape.getWidth(); x++) {
                 if (shape.getSquare(x, y) == 1) {
-                    g2.setPaint(shape.getColor());
-                    rect = new Rectangle(startX + x * squareSize + 2 * x,
-                            startY + y * squareSize + 2 * y, squareSize, squareSize);
-                    g2.fill(rect);
-
-                    // On dessine un petit dégradé pour donner du relief au pièce
-                    gp = new GradientPaint(
-                            startX + x * squareSize + 2 * x,
-                            startY + y * squareSize + 2 * y,
-                            shape.getColor().darker(),
-                            startX + x * squareSize + 2 * x + squareSize,
-                            startY + y * squareSize + 2 * y + squareSize,
-                            new Color(255, 255, 255, 0));
-                    g2.setPaint(gp);
-                    g2.fill(rect);
+                    drawSquare(g2, shape.getColor(), squareSize, borderSize, offsetX, offsetY, x, y, true);
                 }
             }
         }

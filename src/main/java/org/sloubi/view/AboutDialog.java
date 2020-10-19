@@ -3,15 +3,10 @@ package org.sloubi.view;
 import org.sloubi.model.Shape;
 import org.sloubi.model.Tetromino;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -29,21 +24,22 @@ public class AboutDialog extends JDialog {
         initTextPane();
         initButtonPane();
 
-        setTitle("A propos");
         setLayout(new BorderLayout());
+        add(icon, BorderLayout.WEST);
+        add(textPane, BorderLayout.CENTER);
+        add(buttonPane, BorderLayout.PAGE_END);
+
+        setTitle("About");
         setModalityType(ModalityType.APPLICATION_MODAL);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setSize(300, 200);
         setResizable(false);
-
-        add(icon, BorderLayout.WEST);
-        add(textPane, BorderLayout.CENTER);
-        add(buttonPane, BorderLayout.PAGE_END);
+        setVisible(true);
     }
 
     private void initIcon() {
-        icon = new ShapePanel(new Shape(Tetromino.TShape), 20);
+        icon = new ShapePanel(new Shape(Tetromino.VShape), 20, 1);
     }
 
     private void initLink() {
@@ -103,11 +99,7 @@ public class AboutDialog extends JDialog {
 
     private void initButtonPane() {
         JButton close = new JButton("Fermer");
-        close.addActionListener(new ActionListener() {
-          public void actionPerformed(ActionEvent event) {
-            dispose();
-          }
-        });
+        close.addActionListener(event -> dispose());
 
         buttonPane = new JPanel();
         buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));

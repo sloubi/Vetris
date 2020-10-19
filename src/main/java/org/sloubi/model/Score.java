@@ -31,7 +31,7 @@ public class Score implements Comparable<Score>, Serializable {
     }
 
     public void setName(String name) {
-        if (name == "") name = "Anonymous";
+        if (name.equals("")) name = "Anonymous";
         this.name = name;
     }
 
