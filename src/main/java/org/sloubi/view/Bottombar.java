@@ -54,6 +54,11 @@ public class Bottombar extends JPanel implements BoardListener {
     }
 
     @Override
+    public void holdChanged() {
+
+    }
+
+    @Override
     public void scoreChanged() {
         level.setText(String.valueOf(board.getScore().getLevel()));
         score.setText(String.valueOf(board.getScore().getScore()));

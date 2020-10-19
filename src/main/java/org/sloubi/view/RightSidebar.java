@@ -15,7 +15,7 @@ public class RightSidebar extends JPanel implements BoardListener {
     private final JLabel score = new JLabel("0");
     private final JLabel lines = new JLabel("0");
     private final JLabel level = new JLabel("1");
-    private List<ShapePanel> shapePanels = new ArrayList<>();
+    private final List<ShapePanel> shapePanels = new ArrayList<>();
     private JPanel mainPanel;
     private RoundedPanel nextPanel;
     private RoundedPanel sequencePanel;
@@ -75,6 +75,11 @@ public class RightSidebar extends JPanel implements BoardListener {
 
     @Override
     public void boardChanged() {
+
+    }
+
+    @Override
+    public void holdChanged() {
 
     }
 

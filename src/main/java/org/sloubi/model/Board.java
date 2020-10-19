@@ -28,9 +28,9 @@ public class Board implements ActionListener {
     }
 
     private Shape shape;
+    private Shape holdedShape;
 
-    private final Random random = new Random();
-    private List<Shape> nextShapes = new ArrayList<>();
+    private final List<Shape> nextShapes = new ArrayList<>();
     private final Square[][] map = new Square[22][10];
     private GameState state = GameState.InGame;
     private Score score;
@@ -39,6 +39,7 @@ public class Board implements ActionListener {
     private final Timer clockTimer = new Timer(1000, this);
     private int seconds = 0;
     private final HighScores highscores;
+    private boolean holdLocked = false;
 
     // Pour l'animation de game over
     private final Timer endTimer = new Timer(5, this);
@@ -52,13 +53,12 @@ public class Board implements ActionListener {
 
     public void init() {
         state = GameState.InGame;
+        holdedShape = null;
+        holdLocked = false;
+        seconds = 0;
+        score = new Score();
 
         endTimer.stop();
-
-        score = new Score();
-        for (BoardListener listener : listeners) {
-            listener.scoreChanged();
-        }
 
         // Initialisation des cases à 'vide'
         for (int y = 0; y < getHeight(); y++) {
@@ -68,11 +68,9 @@ public class Board implements ActionListener {
         }
 
         for (BoardListener listener : listeners) {
+            listener.scoreChanged();
+            listener.holdChanged();
             listener.boardChanged();
-        }
-
-        seconds = 0;
-        for (BoardListener listener : listeners) {
             listener.clockChanged();
         }
 
@@ -253,6 +251,8 @@ public class Board implements ActionListener {
 
         // Si une ou plusieurs lignes sont complètes, on les enlève
         checkLines();
+
+        holdLocked = false;
     }
 
     /**
@@ -465,5 +465,34 @@ public class Board implements ActionListener {
 
     public HighScores getHighscores() {
         return highscores;
+    }
+
+    public void hold() {
+        if (!holdLocked) {
+            holdLocked = true;
+            updateSquares(Square.State.Empty, null);
+            for (BoardListener listener : listeners) {
+                listener.boardChanged();
+            }
+
+            Shape currentShape = shape;
+            if (holdedShape != null) {
+                shape = holdedShape;
+                shape.setY(0);
+                showShape();
+            }
+            else {
+                assignNewShape();
+            }
+
+            holdedShape = currentShape;
+            for (BoardListener listener : listeners) {
+                listener.holdChanged();
+            }
+        }
+    }
+
+    public Shape getHoldedShape() {
+        return holdedShape;
     }
 }

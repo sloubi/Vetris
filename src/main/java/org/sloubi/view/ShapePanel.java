@@ -26,6 +26,8 @@ public class ShapePanel extends JPanel implements SquareDrawer {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+        if (shape == null) return;
+
         // Dimension de la pièce
         int shapeWidth = shape.getWidth() * squareSize + borderSize * shape.getWidth();
         int shapeHeight = shape.getHeight() * squareSize + borderSize * shape.getHeight();

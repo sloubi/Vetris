@@ -11,12 +11,14 @@ import java.awt.*;
 public class LeftSidebar extends JPanel implements BoardListener {
     private final Board board;
     private final JLabel lines = new JLabel();
+    private final ShapePanel holdShapePanel;
 
     public LeftSidebar(Board board) {
         this.board = board;
         this.board.addListener(this);
 
-        ShapePanel holdShapePanel = new ShapePanel(board.getNextShape(0), 10, 1);
+        holdShapePanel = new ShapePanel(board.getHoldedShape(), 10, 1);
+
         RoundedPanel holdPanel = new RoundedPanel();
         holdPanel.setBorder(BorderFactory.createEmptyBorder(35, 10, 10, 10));
         holdPanel.setTitle("HOLD");
@@ -54,6 +56,11 @@ public class LeftSidebar extends JPanel implements BoardListener {
     @Override
     public void boardChanged() {
 
+    }
+
+    @Override
+    public void holdChanged() {
+        holdShapePanel.setShape(board.getHoldedShape());
     }
 
     @Override

@@ -153,6 +153,9 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         else if (e.getKeyChar() == 'z') {
             board.rotateShape(false);
         }
+        else if (e.getKeyChar() == 'c') {
+            board.hold();
+        }
         else if (e.getKeyCode() == KeyEvent.VK_PAUSE || e.getKeyCode() == KeyEvent.VK_ESCAPE || e.getKeyCode() == KeyEvent.VK_ENTER) {
             if (board.getState() == Board.GameState.Over) {
                 board.init();
@@ -174,6 +177,11 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
     @Override
     public void boardChanged() {
         boardPanel.repaint();
+    }
+
+    @Override
+    public void holdChanged() {
+
     }
 
     @Override
