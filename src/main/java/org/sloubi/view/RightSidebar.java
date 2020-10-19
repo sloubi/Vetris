@@ -6,6 +6,8 @@ import org.sloubi.model.Score;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RightSidebar extends JPanel implements BoardListener {
 
@@ -13,9 +15,10 @@ public class RightSidebar extends JPanel implements BoardListener {
     private final JLabel score = new JLabel("0");
     private final JLabel lines = new JLabel("0");
     private final JLabel level = new JLabel("1");
-    private ShapePanel nextShapePanel;
+    private List<ShapePanel> shapePanels = new ArrayList<>();
     private JPanel mainPanel;
     private RoundedPanel nextPanel;
+    private RoundedPanel sequencePanel;
 
     public RightSidebar(Board board) {
         this.board = board;
@@ -30,7 +33,7 @@ public class RightSidebar extends JPanel implements BoardListener {
     }
 
     private void initComponents() {
-        initNextPanel();
+        initNextPanels();
         initMainPanel();
     }
 
@@ -48,15 +51,26 @@ public class RightSidebar extends JPanel implements BoardListener {
         gbc.insets = new Insets(0, 0, 26, 0);
 
         mainPanel.add(nextPanel, gbc);
+        mainPanel.add(sequencePanel, gbc);
     }
 
-    private void initNextPanel() {
-        nextShapePanel = new ShapePanel(board.getNextShape(), 10, 1);
+    private void initNextPanels() {
+        shapePanels.add(new ShapePanel(board.getNextShape(0), 10, 1));
+        shapePanels.add(new ShapePanel(board.getNextShape(1), 10, 1));
+        shapePanels.add(new ShapePanel(board.getNextShape(2), 10, 1));
+        shapePanels.add(new ShapePanel(board.getNextShape(3), 10, 1));
 
         nextPanel = new RoundedPanel();
         nextPanel.setBorder(BorderFactory.createEmptyBorder(35, 10, 10, 10));
         nextPanel.setTitle("NEXT");
-        nextPanel.add(nextShapePanel);
+        nextPanel.add(shapePanels.get(0));
+
+        sequencePanel = new RoundedPanel();
+        sequencePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        sequencePanel.setLayout(new GridLayout(3, 1, 0, 5));
+        sequencePanel.add(shapePanels.get(1));
+        sequencePanel.add(shapePanels.get(2));
+        sequencePanel.add(shapePanels.get(3));
     }
 
     @Override
@@ -83,7 +97,10 @@ public class RightSidebar extends JPanel implements BoardListener {
 
     @Override
     public void nextShapeChanged() {
-        nextShapePanel.setShape(board.getNextShape());
+        shapePanels.get(0).setShape(board.getNextShape(0));
+        shapePanels.get(1).setShape(board.getNextShape(1));
+        shapePanels.get(2).setShape(board.getNextShape(2));
+        shapePanels.get(3).setShape(board.getNextShape(3));
     }
 
     @Override

@@ -16,7 +16,7 @@ public class LeftSidebar extends JPanel implements BoardListener {
         this.board = board;
         this.board.addListener(this);
 
-        ShapePanel holdShapePanel = new ShapePanel(board.getNextShape(), 10, 1);
+        ShapePanel holdShapePanel = new ShapePanel(board.getNextShape(0), 10, 1);
         RoundedPanel holdPanel = new RoundedPanel();
         holdPanel.setBorder(BorderFactory.createEmptyBorder(35, 10, 10, 10));
         holdPanel.setTitle("HOLD");

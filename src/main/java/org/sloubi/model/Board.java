@@ -2,13 +2,12 @@ package org.sloubi.model;
 
 import org.sloubi.App;
 
-import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 
 public class Board implements ActionListener {
@@ -29,9 +28,9 @@ public class Board implements ActionListener {
     }
 
     private Shape shape;
-    private Shape nextShape;
 
     private final Random random = new Random();
+    private List<Shape> nextShapes = new ArrayList<>();
     private final Square[][] map = new Square[22][10];
     private GameState state = GameState.InGame;
     private Score score;
@@ -80,10 +79,10 @@ public class Board implements ActionListener {
         gameTimer.start();
         clockTimer.start();
 
-        // Choix de la première pièce
-        chooseNextShape();
+        // Initialisation de la séquence des pièces
+        prepareNextShapes();
         // Affichage de la première pièce
-        nextShape();
+        assignNewShape();
     }
 
     public int getHeight() {
@@ -205,38 +204,38 @@ public class Board implements ActionListener {
     }
 
     /**
-     * On choisit la prochaine pièce aléatoirement (dans n'importe quel sens)
+     * On prépare la séquence des prochaines pièces
      */
-    private void chooseNextShape() {
-        // 1 chance sur 20 d'avoir la pièce en V
-        int choiceVShape = random.nextInt(20);
-        if (choiceVShape == 1) {
-            nextShape = new Shape(Tetromino.VShape);
-        }
-        else {
-            Tetromino[] tetrominos = Tetromino.values();
-            int choice = random.nextInt(tetrominos.length - 1);
+    private void prepareNextShapes() {
+        // S'il ne reste plus beaucoup de Tetrominoes dans la séquence
+        if (nextShapes.size() < 5) {
+            // On remplit le sac et on le mélange
+            List<Tetromino> bag = Arrays.asList(Tetromino.values());
+            Collections.shuffle(bag);
 
-            nextShape = new Shape(tetrominos[choice]);
-            nextShape.randomRotate();
-        }
-
-        nextShape.setX(4);
-
-        for (BoardListener listener : listeners) {
-            listener.nextShapeChanged();
+            // On l'injecte dans la séquence
+            for (Tetromino t : bag) {
+                nextShapes.add(new Shape(t));
+            }
         }
     }
 
     /**
-     * On change de pièce, on l'affiche et on choisit la prochaine
+     * On assigne la pièce suivante
      */
-    private void nextShape() {
-        shape = nextShape;
+    private void assignNewShape() {
+        shape = nextShapes.get(0);
+        shape.randomRotate();
+        shape.setX(4);
+        nextShapes.remove(0);
+
+        for (BoardListener listener : listeners) {
+            listener.nextShapeChanged();
+        }
 
         showShape();
 
-        chooseNextShape();
+        prepareNextShapes();
     }
 
     /**
@@ -308,7 +307,7 @@ public class Board implements ActionListener {
             // La pièce s'arrête de descendre
             stopShape();
             // On passe à la pièce suivante
-            nextShape();
+            assignNewShape();
 
             // La nouvelle pièce est bloquée avant d'avoir pu descendre, c'est perdu
             if (!shapeCanMove(0, 1)) {
@@ -460,8 +459,8 @@ public class Board implements ActionListener {
         return seconds;
     }
 
-    public Shape getNextShape() {
-        return nextShape;
+    public Shape getNextShape(int index) {
+        return nextShapes.get(index);
     }
 
     public HighScores getHighscores() {
