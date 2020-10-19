@@ -11,10 +11,14 @@ public class HighScores implements Serializable, Iterable<Score> {
 
     private final ArrayList<Score> scores = new ArrayList<>();
     private static final String highScoreFilename = "highscore.ser";
+    private final int keeped = 5;
 
     public void add(Score s) {
         scores.add(s);
         scores.sort(Collections.reverseOrder());
+
+        if (scores.size() > keeped)
+            scores.remove(scores.size() - 1);
     }
 
     public int getMinScore() {

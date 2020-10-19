@@ -12,7 +12,7 @@ public class HighScoresDialog extends JDialog {
             getContentPane().add(new JLabel(score.toString()));
         }
 
-        setTitle("A propos");
+        setTitle("HighScores");
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
