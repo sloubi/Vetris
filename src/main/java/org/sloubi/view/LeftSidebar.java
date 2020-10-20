@@ -89,7 +89,7 @@ public class LeftSidebar extends JPanel implements BoardListener {
     }
 
     @Override
-    public void tetris() {
+    public void userEvent(String event) {
 
     }
 }

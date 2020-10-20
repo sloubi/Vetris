@@ -150,6 +150,10 @@ public class Board implements ActionListener {
 
             moveShape(0, --moveY);
             step();
+
+            for (BoardListener listener : listeners) {
+                listener.userEvent("hardDrop");
+            }
         }
     }
 
@@ -165,9 +169,9 @@ public class Board implements ActionListener {
             }
         }
 
-        if (nbOfFullLines == 4) {
+        if (nbOfFullLines > 0) {
             for (BoardListener listener : listeners) {
-                listener.tetris();
+                listener.userEvent(nbOfFullLines == 4 ? "tetris" : "line");
             }
         }
 
@@ -241,6 +245,10 @@ public class Board implements ActionListener {
 
         for (BoardListener listener : listeners) {
             listener.nextShapeChanged();
+
+            if (shape.tetromino.equals(Tetromino.VShape)) {
+                listener.userEvent("vShape");
+            }
         }
 
         showShape();
@@ -301,6 +309,7 @@ public class Board implements ActionListener {
 
             for (BoardListener listener : listeners) {
                 listener.boardChanged();
+                listener.userEvent("rotate");
             }
         }
     }
@@ -314,6 +323,14 @@ public class Board implements ActionListener {
         // Si on peut, on déplace la pièce vers le bas
         if (shapeCanMove(0, 1)) {
             moveShape(0, 1);
+
+            // Si le prochain déplacement est impossible, on est en bas
+            // On envoie tout de suite l'évènement pour pas attendre
+            if (!shapeCanMove(0, 1)) {
+                for (BoardListener listener : listeners) {
+                    listener.userEvent("bottom");
+                }
+            }
         }
         else {
             // La pièce s'arrête de descendre
@@ -341,10 +358,11 @@ public class Board implements ActionListener {
         if (state == GameState.InGame) {
             if (shapeCanMove(moveX, moveY)) {
                 moveShape(moveX, moveY);
-            }
 
-            for (BoardListener listener : listeners) {
-                listener.boardChanged();
+                for (BoardListener listener : listeners) {
+                    listener.boardChanged();
+                    listener.userEvent("move");
+                }
             }
         }
     }
@@ -383,6 +401,10 @@ public class Board implements ActionListener {
         state = GameState.Over;
         gameTimer.stop();
         clockTimer.stop();
+
+        for (BoardListener listener : listeners) {
+            listener.userEvent("gameOver");
+        }
 
         // Animation de fin
         endX = 0;
@@ -501,6 +523,7 @@ public class Board implements ActionListener {
             holdedShape = currentShape;
             for (BoardListener listener : listeners) {
                 listener.holdChanged();
+                listener.userEvent("hold");
             }
         }
     }

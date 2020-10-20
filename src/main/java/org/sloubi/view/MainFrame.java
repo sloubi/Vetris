@@ -247,10 +247,21 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
     }
 
     @Override
-    public void tetris() {
+    public void userEvent(String event) {
         if (App.prefs.getBoolean("sound", true)) {
-            App.wowClip.setFramePosition(0);
-            App.wowClip.start();
+            Clip clip = switch (event) {
+                case "tetris" -> App.wowClip;
+                case "rotate", "move" -> App.beepClip;
+                case "bottom" -> App.pop2Clip;
+                case "hardDrop" -> App.pop1Clip;
+                case "line" -> App.completeClip;
+                case "vShape" -> App.warningClip;
+                case "gameOver" -> App.clapClip;
+                case "hold" -> App.clickClip;
+                default -> throw new IllegalStateException("Unexpected value: " + event);
+            };
+            clip.setFramePosition(0);
+            clip.start();
         }
     }
 

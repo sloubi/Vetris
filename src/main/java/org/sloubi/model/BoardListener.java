@@ -8,5 +8,5 @@ public interface BoardListener {
     void clockChanged();
     void nextShapeChanged();
     void newHighScore(Score score);
-    void tetris();
+    void userEvent(String event);
 }

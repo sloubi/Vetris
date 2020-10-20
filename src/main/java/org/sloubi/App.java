@@ -14,6 +14,13 @@ public class App
     public static Font barFont;
     public static Clip gameClip;
     public static Clip wowClip;
+    public static Clip completeClip;
+    public static Clip warningClip;
+    public static Clip beepClip;
+    public static Clip clapClip;
+    public static Clip pop1Clip;
+    public static Clip pop2Clip;
+    public static Clip clickClip;
     public static final Preferences prefs = Preferences.userNodeForPackage(org.sloubi.App.class);
     public static String version = "1.0";
 
@@ -54,13 +61,26 @@ public class App
             e.printStackTrace();
         }
 
-        InputStream isWow = MainFrame.class.getResourceAsStream("/sounds/wow.wav");
+        wowClip = initClip("/sounds/wow.wav");
+        completeClip = initClip("/sounds/complete.wav");
+        warningClip = initClip("/sounds/warning.wav");
+        beepClip = initClip("/sounds/beep.wav");
+        clapClip = initClip("/sounds/clap.wav");
+        pop1Clip = initClip("/sounds/pop1.wav");
+        pop2Clip = initClip("/sounds/pop2.wav");
+        clickClip = initClip("/sounds/click.wav");
+    }
+
+    private static Clip initClip(String filename) {
+        InputStream is = MainFrame.class.getResourceAsStream(filename);
         try {
-            wowClip = AudioSystem.getClip();
-            AudioInputStream ais = AudioSystem.getAudioInputStream(isWow);
-            wowClip.open(ais);
+            Clip clip = AudioSystem.getClip();
+            AudioInputStream ais = AudioSystem.getAudioInputStream(is);
+            clip.open(ais);
+            return clip;
         } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
             e.printStackTrace();
         }
+        return null;
     }
 }
