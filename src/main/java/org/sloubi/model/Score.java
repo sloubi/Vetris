@@ -11,7 +11,7 @@ public class Score implements Comparable<Score>, Serializable {
     private int time;
     private int level = 1;
     private boolean VShapeActive = true;
-    private String version = App.version;
+    private final String version = App.version;
     private String name;
 
     public int getScore() {
@@ -46,6 +46,10 @@ public class Score implements Comparable<Score>, Serializable {
 
     public void setTime(int time) {
         this.time = time;
+    }
+
+    public void setVShapeActive(boolean VShapeActive) {
+        this.VShapeActive = VShapeActive;
     }
 
     @Override

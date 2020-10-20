@@ -83,4 +83,9 @@ public class Bottombar extends JPanel implements BoardListener {
     public void newHighScore(Score score) {
 
     }
+
+    @Override
+    public void tetris() {
+
+    }
 }

@@ -7,8 +7,7 @@ public interface SquareDrawer {
         final int x1 = offsetX + x * squareSize + borderSize * x;
         final int y1 = offsetY + y * squareSize + borderSize * y;
 
-        Rectangle rect = new Rectangle(x1,
-                y1, squareSize, squareSize);
+        Rectangle rect = new Rectangle(x1, y1, squareSize, squareSize);
 
         g2.setPaint(squareColor);
         g2.fill(rect);

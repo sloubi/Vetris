@@ -1,5 +1,6 @@
 package org.sloubi.view;
 
+import org.sloubi.App;
 import org.sloubi.model.Shape;
 
 import javax.swing.*;
@@ -41,7 +42,7 @@ public class ShapePanel extends JPanel implements SquareDrawer {
         for (int y = 0; y < shape.getHeight(); y++) {
             for (int x = 0; x < shape.getWidth(); x++) {
                 if (shape.getSquare(x, y) == 1) {
-                    drawSquare(g2, shape.getColor(), squareSize, borderSize, offsetX, offsetY, x, y, true);
+                    drawSquare(g2, shape.getColor(), squareSize, borderSize, offsetX, offsetY, x, y, App.prefs.getBoolean("reliefOnThePieces", true));
                 }
             }
         }

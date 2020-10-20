@@ -1,5 +1,7 @@
 package org.sloubi.model;
 
+import org.sloubi.App;
+
 import java.awt.*;
 
 public class Square {
@@ -33,7 +35,8 @@ public class Square {
     }
 
     public boolean hasGradient() {
-        return state == State.Filled || state == State.Current;
+        return App.prefs.getBoolean("reliefOnThePieces", true) &&
+                (state == State.Filled || state == State.Current);
     }
 
     public void setColor(Color color) {

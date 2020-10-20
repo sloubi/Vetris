@@ -6,6 +6,7 @@ import javax.sound.sampled.*;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.prefs.Preferences;
 
 public class App
 {
@@ -13,6 +14,7 @@ public class App
     public static Font barFont;
     public static Clip gameClip;
     public static Clip wowClip;
+    public static final Preferences prefs = Preferences.userNodeForPackage(org.sloubi.App.class);
     public static String version = "1.0";
 
 

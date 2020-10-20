@@ -34,13 +34,14 @@ public class Board implements ActionListener {
     private final List<Shape> nextShapes = new ArrayList<>();
     private final Square[][] map = new Square[22][10];
     private GameState state = GameState.InGame;
-    private Score score;
+    private Score score = new Score();
     private final List<BoardListener> listeners = new ArrayList<>();
     private final Timer gameTimer = new Timer(1000, this);
     private final Timer clockTimer = new Timer(1000, this);
     private int seconds = 0;
     private final HighScores highscores;
     private boolean holdLocked = false;
+    private boolean vShapeActive = App.prefs.getBoolean("vshape", true);
 
     // Pour l'animation de game over
     private final Timer endTimer = new Timer(5, this);
@@ -48,16 +49,17 @@ public class Board implements ActionListener {
     private int endY;
 
     public Board() {
-        init();
         highscores = HighScores.load();
     }
 
-    public void init() {
+    public void start() {
         state = GameState.InGame;
         holdedShape = null;
         holdLocked = false;
         seconds = 0;
         score = new Score();
+        // Cette option ne peut pas être changée en cours de partie
+        vShapeActive = App.prefs.getBoolean("vshape", true);
 
         endTimer.stop();
 
@@ -69,6 +71,7 @@ public class Board implements ActionListener {
         }
 
         for (BoardListener listener : listeners) {
+            listener.stateChanged();
             listener.scoreChanged();
             listener.holdChanged();
             listener.boardChanged();
@@ -163,8 +166,9 @@ public class Board implements ActionListener {
         }
 
         if (nbOfFullLines == 4) {
-            App.wowClip.setFramePosition(0);
-            App.wowClip.start();
+            for (BoardListener listener : listeners) {
+                listener.tetris();
+            }
         }
 
         increaseScore(nbOfFullLines);
@@ -209,10 +213,10 @@ public class Board implements ActionListener {
         // S'il ne reste plus beaucoup de Tetrominoes dans la séquence
         if (nextShapes.size() < 5) {
             // On remplit le sac avec chacune des différentes pièces
-            LinkedList<Tetromino> bag = new LinkedList<Tetromino>(Arrays.asList(Tetromino.values()));
+            LinkedList<Tetromino> bag = new LinkedList<>(Arrays.asList(Tetromino.values()));
 
             // On enlève le V sauf si pas de chance (1 chance sur 4)
-            if (random.nextInt(4) != 3) {
+            if (!vShapeActive || random.nextInt(4) != 3) {
                 bag.remove(bag.size() - 1);
             }
 
@@ -394,6 +398,7 @@ public class Board implements ActionListener {
         if (highscores.isHighScore(score)) {
             for (BoardListener listener : listeners) {
                 score.setTime(seconds);
+                score.setVShapeActive(vShapeActive);
                 listener.newHighScore(score);
             }
         }
@@ -468,7 +473,7 @@ public class Board implements ActionListener {
     }
 
     public Shape getNextShape(int index) {
-        return nextShapes.get(index);
+        return nextShapes.isEmpty() ? null : nextShapes.get(index);
     }
 
     public HighScores getHighscores() {

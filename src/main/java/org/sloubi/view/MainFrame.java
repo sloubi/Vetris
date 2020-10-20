@@ -1,15 +1,16 @@
 package org.sloubi.view;
 
+import org.sloubi.App;
 import org.sloubi.model.Board;
 import org.sloubi.model.BoardListener;
 import org.sloubi.model.Score;
 
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class MainFrame extends JFrame implements KeyListener, BoardListener, ActionListener, MenuListener {
-
 
     private final Board board = new Board();
     private BoardPanel boardPanel;
@@ -21,6 +22,7 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         initComponents();
         buildFrame();
         eventHandling();
+        board.start();
     }
 
     public void initComponents() {
@@ -30,7 +32,7 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         boardPanelContainer.add(boardPanel);
         boardPanelContainer.setFilled(true);
         boardPanelContainer.setBorderColor(new Color(80, 80, 80));
-        boardPanelContainer.setBorder(BorderFactory.createEmptyBorder(6, 6, 5, 5));
+        boardPanelContainer.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
 
         JPanel switcher = new JPanel();
         switcher.setOpaque(false);
@@ -89,10 +91,11 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         addMouseListener(frameDragListener);
         addMouseMotionListener(frameDragListener);
 
-        board.addListener(this);
         addKeyListener(this);
 
         menu.addListener(this);
+
+        board.addListener(this);
     }
 
     public void buildFrame() {
@@ -100,8 +103,8 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         setResizable(false);
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setVisible(true);
         pack();
+        setVisible(true);
         setLocationRelativeTo(null);
     }
 
@@ -114,12 +117,23 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         boardPanelContainer.setVisible(board.getState() == Board.GameState.InGame);
         menu.setState(board.getState());
         menu.setVisible(board.getState() == Board.GameState.Paused);
+
+        // Seulement quand le plateau de jeu est affiché, sinon la fenêtre se base sur la taille du menu
+        if (board.getState() == Board.GameState.InGame) {
+            updateSize();
+        }
     }
 
     public void gameOver() {
         boardPanelContainer.setVisible(false);
         menu.setState(board.getState());
         menu.setVisible(true);
+    }
+
+    public void updateSize() {
+        boardPanel.updateSize();
+        boardPanelContainer.revalidate();
+        pack();
     }
 
     /**
@@ -158,7 +172,7 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         }
         else if (e.getKeyCode() == KeyEvent.VK_PAUSE || e.getKeyCode() == KeyEvent.VK_ESCAPE || e.getKeyCode() == KeyEvent.VK_ENTER) {
             if (board.getState() == Board.GameState.Over) {
-                board.init();
+                board.start();
             }
             else {
                 pause();
@@ -193,6 +207,17 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
     public void stateChanged() {
         boardPanel.repaint();
 
+        // Quand on est en pause, la musique s'arrête
+        if (App.prefs.getBoolean("music", true)) {
+            if (board.getState() != Board.GameState.InGame) {
+                App.gameClip.stop();
+            }
+            else {
+                App.gameClip.loop(Clip.LOOP_CONTINUOUSLY);
+                App.gameClip.start();
+            }
+        }
+
         if (board.getState() == Board.GameState.Over) {
             gameOver();
         }
@@ -222,13 +247,21 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
     }
 
     @Override
+    public void tetris() {
+        if (App.prefs.getBoolean("sound", true)) {
+            App.wowClip.setFramePosition(0);
+            App.wowClip.start();
+        }
+    }
+
+    @Override
     public void resumeClicked() {
         pause();
     }
 
     @Override
     public void newGameClicked() {
-        board.init();
+        board.start();
         boardPanelContainer.setVisible(true);
         menu.setVisible(false);
     }
@@ -246,7 +279,7 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
 
     @Override
     public void optionsClicked() {
-        new OptionsDialog();
+        new OptionsDialog(board.getState());
         requestFocus();
     }
 

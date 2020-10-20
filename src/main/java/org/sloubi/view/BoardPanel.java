@@ -1,5 +1,6 @@
 package org.sloubi.view;
 
+import org.sloubi.App;
 import org.sloubi.model.Board;
 import org.sloubi.model.Square;
 
@@ -9,14 +10,13 @@ import java.awt.*;
 public class BoardPanel extends JPanel implements SquareDrawer {
 
     private final Board board;
-    private final int squareSize = 20;
-    private final int squareBorder = 2;
+    private int squareSize;
+    private int squareBorder;
 
     public BoardPanel(Board board) {
         this.board = board;
 
-        setPreferredSize(new Dimension(board.getWidth() * squareSize + squareBorder * board.getWidth(),
-                board.getHeight() * squareSize + squareBorder * board.getHeight()));
+        updateSize();
         setOpaque(false);
     }
 
@@ -43,5 +43,15 @@ public class BoardPanel extends JPanel implements SquareDrawer {
                         square.hasGradient());
             }
         }
+    }
+
+    public void updateSize() {
+        squareSize = App.prefs.getInt("squareSize", 20);
+        squareBorder = App.prefs.getInt("gridSize", 2);
+
+        setPreferredSize(new Dimension(board.getWidth() * squareSize + squareBorder * (board.getWidth() - 1),
+                board.getHeight() * squareSize + squareBorder * (board.getHeight() - 1)));
+//        setSize(new Dimension(board.getWidth() * squareSize + squareBorder * (board.getWidth() - 1),
+//                board.getHeight() * squareSize + squareBorder * (board.getHeight() - 1)));
     }
 }

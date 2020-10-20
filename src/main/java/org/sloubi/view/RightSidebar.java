@@ -111,5 +111,10 @@ public class RightSidebar extends JPanel implements BoardListener {
     @Override
     public void newHighScore(Score score) {
     }
+
+    @Override
+    public void tetris() {
+
+    }
 }
 
