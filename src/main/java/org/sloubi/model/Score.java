@@ -1,5 +1,7 @@
 package org.sloubi.model;
 
+import org.sloubi.App;
+
 import java.io.Serializable;
 
 public class Score implements Comparable<Score>, Serializable {
@@ -8,6 +10,8 @@ public class Score implements Comparable<Score>, Serializable {
     private int lines;
     private int time;
     private int level = 1;
+    private boolean VShapeActive = true;
+    private String version = App.version;
     private String name;
 
     public int getScore() {
@@ -28,6 +32,10 @@ public class Score implements Comparable<Score>, Serializable {
 
     public int getLevel() {
         return level;
+    }
+
+    public boolean isVShapeActive() {
+        return VShapeActive;
     }
 
     public void setName(String name) {
@@ -74,7 +82,7 @@ public class Score implements Comparable<Score>, Serializable {
      * @return True si le niveau a changé
      */
     public boolean updateLevel() {
-        int linesForNextLevel = (level + 1) * 10;
+        int linesForNextLevel = level * 10;
         if (lines >= linesForNextLevel) {
             level++;
             return true;

@@ -10,8 +10,8 @@ public class HighScores implements Serializable, Iterable<Score> {
     private static final long serialVersionUID = 8392154074028239629L;
 
     private final ArrayList<Score> scores = new ArrayList<>();
-    private static final String highScoreFilename = "highscore.ser";
-    private final int keeped = 5;
+    private transient static final String highScoreFilename = "highscore.ser";
+    private transient final int keeped = 5;
 
     public void add(Score s) {
         scores.add(s);
@@ -73,9 +73,16 @@ public class HighScores implements Serializable, Iterable<Score> {
         }
     }
 
-
     @Override
     public Iterator<Score> iterator() {
         return scores.iterator();
+    }
+
+    public int size() {
+        return scores.size();
+    }
+
+    public Score get(int index) {
+        return scores.get(index);
     }
 }

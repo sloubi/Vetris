@@ -83,7 +83,7 @@ public class AboutDialog extends JDialog {
         textPane.add(title, gbc);
 
         JPanel authorPane = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        JLabel author = new JLabel("Par Sloubi, ");
+        JLabel author = new JLabel("By Sloubi, ");
         author.setFont(author.getFont().deriveFont(Font.PLAIN));
         authorPane.add(author);
         authorPane.add(link);
@@ -91,14 +91,14 @@ public class AboutDialog extends JDialog {
         textPane.add(authorPane, gbc);
         textPane.add(new JLabel(" "), gbc);
 
-        JLabel createdAt = new JLabel("Créé en Septembre 2020");
+        JLabel createdAt = new JLabel("Created in September 2020");
         createdAt.setFont(createdAt.getFont().deriveFont(Font.PLAIN));
         createdAt.setForeground(Color.darkGray);
         textPane.add(createdAt, gbc);
     }
 
     private void initButtonPane() {
-        JButton close = new JButton("Fermer");
+        JButton close = new JButton("Close");
         close.addActionListener(event -> dispose());
 
         buttonPane = new JPanel();

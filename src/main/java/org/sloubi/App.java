@@ -13,6 +13,7 @@ public class App
     public static Font barFont;
     public static Clip gameClip;
     public static Clip wowClip;
+    public static String version = "1.0";
 
 
     public static void main( String[] args )

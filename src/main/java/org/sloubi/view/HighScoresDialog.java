@@ -1,24 +1,60 @@
 package org.sloubi.view;
 
 import org.sloubi.model.HighScores;
-import org.sloubi.model.Score;
 
 import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import java.awt.*;
 
 public class HighScoresDialog extends JDialog {
     public HighScoresDialog(HighScores hs) {
-        for (Score score : hs) {
-            getContentPane().add(new JLabel(score.toString()));
-        }
+        JTable table = new JTable(new HighScoresModel(hs));
 
+        getContentPane().add(new JScrollPane(table), BorderLayout.CENTER);
         setTitle("HighScores");
-        getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setSize(300, 200);
         setResizable(false);
+        pack();
+        setLocationRelativeTo(null);
         setVisible(true);
+    }
+}
+
+class HighScoresModel extends AbstractTableModel  {
+
+    private final HighScores hs;
+    private transient final String[] headers = {"Name", "Score", "Lines", "Level", "Time", "V Piece"};
+
+    public HighScoresModel(HighScores hs) {
+        this.hs = hs;
+    }
+
+    @Override
+    public int getRowCount() {
+        return hs.size();
+    }
+
+    @Override
+    public int getColumnCount() {
+        return headers.length;
+    }
+
+    @Override
+    public String getColumnName(int columnIndex) {
+        return headers[columnIndex];
+    }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+        return switch (columnIndex) {
+            case 0 -> hs.get(rowIndex).getName();
+            case 1 -> hs.get(rowIndex).getScore();
+            case 2 -> hs.get(rowIndex).getLines();
+            case 3 -> hs.get(rowIndex).getLevel();
+            case 4 -> hs.get(rowIndex).getTime();
+            case 5 -> hs.get(rowIndex).isVShapeActive() ? "yes" : "no";
+            default -> null;
+        };
     }
 }
