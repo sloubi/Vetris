@@ -2,14 +2,12 @@ package org.sloubi.model;
 
 import org.sloubi.App;
 
-import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.*;
 
 
 public class Board implements ActionListener {
@@ -32,6 +30,7 @@ public class Board implements ActionListener {
     private Shape shape;
     private Shape holdedShape;
 
+    private final Random random = new Random();
     private final List<Shape> nextShapes = new ArrayList<>();
     private final Square[][] map = new Square[22][10];
     private GameState state = GameState.InGame;
@@ -209,8 +208,15 @@ public class Board implements ActionListener {
     private void prepareNextShapes() {
         // S'il ne reste plus beaucoup de Tetrominoes dans la séquence
         if (nextShapes.size() < 5) {
-            // On remplit le sac et on le mélange
-            List<Tetromino> bag = Arrays.asList(Tetromino.values());
+            // On remplit le sac avec chacune des différentes pièces
+            LinkedList<Tetromino> bag = new LinkedList<Tetromino>(Arrays.asList(Tetromino.values()));
+
+            // On enlève le V sauf si pas de chance (1 chance sur 4)
+            if (random.nextInt(4) != 3) {
+                bag.remove(bag.size() - 1);
+            }
+
+            // On secoue le sac
             Collections.shuffle(bag);
 
             // On l'injecte dans la séquence
@@ -224,10 +230,10 @@ public class Board implements ActionListener {
      * On assigne la pièce suivante
      */
     private void assignNewShape() {
-        shape = nextShapes.get(0);
+        // On prend la première pièce de la séquence et on la supprime
+        shape = nextShapes.remove(0);
         shape.randomRotate();
         shape.setX(4);
-        nextShapes.remove(0);
 
         for (BoardListener listener : listeners) {
             listener.nextShapeChanged();
