@@ -16,6 +16,9 @@ public class OptionsDialog extends JDialog {
     private JCheckBox musicCheckBox;
     private JCheckBox vPieceCheckBox;
     private JCheckBox soundEffectsCheckBox;
+	private JCheckBox showTetriminosPerMinuteCheckBox;
+    private JCheckBox showLinesPerMinuteCheckBox;
+    private JCheckBox showSecondsCheckBox;
     private final Board.GameState gameState;
 
     public OptionsDialog(Board.GameState gameState) {
@@ -65,6 +68,9 @@ public class OptionsDialog extends JDialog {
         reliefOnThePiecesCheckBox.setSelected(App.prefs.getBoolean("reliefOnThePieces", true));
         gridSizeSpinner.setValue(App.prefs.getInt("gridSize", 2));
         squareSizeSpinner.setValue(App.prefs.getInt("squareSize", 20));
+        showTetriminosPerMinuteCheckBox.setSelected(App.prefs.getBoolean("showTetriminosPerMinute", false));
+        showLinesPerMinuteCheckBox.setSelected(App.prefs.getBoolean("showLinesPerMinute", false));
+        showSecondsCheckBox.setSelected(App.prefs.getBoolean("showSeconds", false));
 
         if (gameState == Board.GameState.InGame)
             vPieceCheckBox.setEnabled(false);
@@ -77,5 +83,8 @@ public class OptionsDialog extends JDialog {
         App.prefs.putBoolean("reliefOnThePieces", reliefOnThePiecesCheckBox.isSelected());
         App.prefs.putInt("gridSize", (Integer) gridSizeSpinner.getValue());
         App.prefs.putInt("squareSize", (Integer) squareSizeSpinner.getValue());
+        App.prefs.putBoolean("showTetriminosPerMinute", showTetriminosPerMinuteCheckBox.isSelected());
+        App.prefs.putBoolean("showLinesPerMinute", showLinesPerMinuteCheckBox.isSelected());
+        App.prefs.putBoolean("showSeconds", showSecondsCheckBox.isSelected());
     }
 }

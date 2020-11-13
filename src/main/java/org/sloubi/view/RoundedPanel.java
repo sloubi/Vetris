@@ -56,7 +56,7 @@ public class RoundedPanel extends JPanel {
         FontMetrics metrics = g2.getFontMetrics(font);
 
         g2.setColor(borderColor);
-        g2.fillRect(borderSize, borderSize, getWidth() - borderSize * 2, metrics.getHeight());
+        g2.fillRect(borderSize, borderSize - 1, getWidth() - borderSize * 2, metrics.getHeight());
 
         int x = (getWidth() - metrics.stringWidth(title)) / 2;
         int y = titleTopMargin != 0 ? titleTopMargin : borderSize * 2 + metrics.getHeight() / 2;

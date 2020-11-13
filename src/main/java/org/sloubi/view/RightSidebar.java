@@ -1,5 +1,6 @@
 package org.sloubi.view;
 
+import org.sloubi.App;
 import org.sloubi.model.Board;
 import org.sloubi.model.BoardListener;
 import org.sloubi.model.Score;
@@ -15,10 +16,12 @@ public class RightSidebar extends JPanel implements BoardListener {
     private final JLabel score = new JLabel("0");
     private final JLabel lines = new JLabel("0");
     private final JLabel level = new JLabel("1");
+    private final JLabel seconds = new JLabel();
     private final List<ShapePanel> shapePanels = new ArrayList<>();
     private JPanel mainPanel;
     private RoundedPanel nextPanel;
     private RoundedPanel sequencePanel;
+    private RoundedPanel secondsPanel;
 
     public RightSidebar(Board board) {
         this.board = board;
@@ -34,7 +37,9 @@ public class RightSidebar extends JPanel implements BoardListener {
 
     private void initComponents() {
         initNextPanels();
+        initSecondsPanel();
         initMainPanel();
+        updateLayout();
     }
 
     private void initMainPanel() {
@@ -47,11 +52,12 @@ public class RightSidebar extends JPanel implements BoardListener {
         gbc.gridy = GridBagConstraints.RELATIVE;
         gbc.weightx = 1.0;
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.NONE;
         gbc.insets = new Insets(0, 0, 26, 0);
 
         mainPanel.add(nextPanel, gbc);
         mainPanel.add(sequencePanel, gbc);
+        mainPanel.add(secondsPanel, gbc);
     }
 
     private void initNextPanels() {
@@ -71,6 +77,25 @@ public class RightSidebar extends JPanel implements BoardListener {
         sequencePanel.add(shapePanels.get(1));
         sequencePanel.add(shapePanels.get(2));
         sequencePanel.add(shapePanels.get(3));
+
+        Dimension dim = new Dimension(nextPanel.getPreferredSize().width, sequencePanel.getPreferredSize().height);
+        sequencePanel.setPreferredSize(dim);
+    }
+
+    private void initSecondsPanel() {
+        secondsPanel = new RoundedPanel();
+        secondsPanel.setTitle("Time");
+        secondsPanel.setFilled(true);
+        secondsPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 4, 30));
+        secondsPanel.add(seconds);
+        seconds.setFont(App.barFont.deriveFont(24f));
+
+        Dimension dim = new Dimension(nextPanel.getPreferredSize().width, 80);
+        secondsPanel.setPreferredSize(dim);
+    }
+
+    public void updateLayout() {
+        secondsPanel.setVisible(App.prefs.getBoolean("showSeconds", false));
     }
 
     @Override
@@ -97,7 +122,7 @@ public class RightSidebar extends JPanel implements BoardListener {
 
     @Override
     public void clockChanged() {
-
+        seconds.setText(String.valueOf(board.getSeconds()));
     }
 
     @Override

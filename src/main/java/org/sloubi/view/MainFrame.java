@@ -17,6 +17,8 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
     private RoundedPanel boardPanelContainer = new RoundedPanel();
     private final JButton closeButton = new JButton("X");
     private final MenuPanel menu = new MenuPanel();
+    private final RightSidebar rightSidebar = new RightSidebar(board);
+    private final LeftSidebar leftSidebar = new LeftSidebar(board);
 
     public MainFrame() {
         initComponents();
@@ -46,8 +48,8 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         mainPanel.setLayout(new BorderLayout());
         mainPanel.add(new TitlePanel(), BorderLayout.PAGE_START);
         mainPanel.add(switcher, BorderLayout.CENTER);
-        mainPanel.add(new RightSidebar(board), BorderLayout.EAST);
-        mainPanel.add(new LeftSidebar(board), BorderLayout.WEST);
+        mainPanel.add(rightSidebar, BorderLayout.EAST);
+        mainPanel.add(leftSidebar, BorderLayout.WEST);
 
         initCloseButton();
         JPanel closePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -291,6 +293,8 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
     @Override
     public void optionsClicked() {
         new OptionsDialog(board.getState());
+        leftSidebar.updateLayout();
+        rightSidebar.updateLayout();
         requestFocus();
     }
 

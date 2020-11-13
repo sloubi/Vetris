@@ -8,11 +8,12 @@ public class Score implements Comparable<Score>, Serializable {
     private static final long serialVersionUID = -4401162744040333360L;
     private int score;
     private int lines;
-    private int time;
+    private int seconds;
     private int level = 1;
     private boolean VShapeActive = true;
     private final String version = App.version;
     private String name;
+    private int piecesDropped = 0;
 
     public int getScore() {
         return score;
@@ -22,8 +23,8 @@ public class Score implements Comparable<Score>, Serializable {
         return lines;
     }
 
-    public int getTime() {
-        return time;
+    public int getSeconds() {
+        return seconds;
     }
 
     public String getName() {
@@ -32,6 +33,24 @@ public class Score implements Comparable<Score>, Serializable {
 
     public int getLevel() {
         return level;
+    }
+
+    public int getPiecesDropped() {
+        return piecesDropped;
+    }
+
+    /**
+     * @return Lines per minute
+     */
+    public int getLPM() {
+        return seconds != 0 ? Math.round((float) lines / (float) seconds * 60) : 0;
+    }
+
+    /**
+     * @return Tetriminos per minute
+     */
+    public int getTPM() {
+        return seconds != 0 ? Math.round((float) piecesDropped / (float) seconds * 60) : 0;
     }
 
     public boolean isVShapeActive() {
@@ -44,8 +63,8 @@ public class Score implements Comparable<Score>, Serializable {
         this.name = name;
     }
 
-    public void setTime(int time) {
-        this.time = time;
+    public void addSecond() {
+        seconds++;
     }
 
     public void setVShapeActive(boolean VShapeActive) {
@@ -92,6 +111,14 @@ public class Score implements Comparable<Score>, Serializable {
             return true;
         }
         return false;
+    }
+
+    public void addPieceDropped() {
+        piecesDropped++;
+    }
+
+    public void setLines(int lines) {
+        this.lines = lines;
     }
 
     @Override
