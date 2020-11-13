@@ -13,25 +13,26 @@ public class BackgroundContainer extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                            RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2.setPaint(new Color(13, 15, 22));
+        Color color1 = new Color(12, 12, 12);
+        Color color2 = new Color(25, 29, 35);
+
+        g2.setPaint(color2);
         g2.fillRect(0, 0, getWidth(), getHeight());
 
-        Color color1 = new Color(12, 12, 12);
-        Color color2 = new Color(13, 15, 22);
         GradientPaint gp = new GradientPaint(0, 0, color1, 0, 200, color2);
         g2.setPaint(gp);
         g2.fillRect(0, 0, getWidth(), 200);
 
-        Color c1 = new Color(13, 15, 22, 240).brighter();
-        Color c2 = new Color(13, 15, 22, 190).brighter();
-        Color c3 = new Color(13, 15, 22, 140).brighter();
+        Color c1 = new Color(25, 29, 35, 240).brighter();
+        Color c2 = new Color(25, 29, 35, 190).brighter();
+        Color c3 = new Color(25, 29, 35, 140).brighter();
 
         g2.setColor(c1);
-        g2.fillRect(20, 30, 20, 20);
+        g2.fillRect(20, 38, 20, 20);
         g2.setColor(c2);
         g2.fillRect(40, 66, 35, 35);
         g2.setColor(c3);
-        g2.fillRect(34, 120, 18, 18);
+        g2.fillRect(30, 110, 18, 18);
 
         g2.setColor(c1);
         g2.fillRect(140, 400, 45, 45);

@@ -52,7 +52,7 @@ class HighScoresModel extends AbstractTableModel  {
             case 1 -> hs.get(rowIndex).getScore();
             case 2 -> hs.get(rowIndex).getLines();
             case 3 -> hs.get(rowIndex).getLevel();
-            case 4 -> hs.get(rowIndex).getTime();
+            case 4 -> hs.get(rowIndex).getSeconds();
             case 5 -> hs.get(rowIndex).isVShapeActive() ? "yes" : "no";
             default -> null;
         };

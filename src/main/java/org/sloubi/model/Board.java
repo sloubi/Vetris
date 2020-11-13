@@ -38,7 +38,6 @@ public class Board implements ActionListener {
     private final List<BoardListener> listeners = new ArrayList<>();
     private final Timer gameTimer = new Timer(1000, this);
     private final Timer clockTimer = new Timer(1000, this);
-    private int seconds = 0;
     private final HighScores highscores;
     private boolean holdLocked = false;
     private boolean vShapeActive = App.prefs.getBoolean("vshape", true);
@@ -56,7 +55,6 @@ public class Board implements ActionListener {
         state = GameState.InGame;
         holdedShape = null;
         holdLocked = false;
-        seconds = 0;
         score = new Score();
         // Cette option ne peut pas être changée en cours de partie
         vShapeActive = App.prefs.getBoolean("vshape", true);
@@ -136,6 +134,15 @@ public class Board implements ActionListener {
 
         // On déplace
         updateSquares(Square.State.Current, shape.getColor());
+
+        // Si le prochain déplacement est impossible, on est en bas
+        if (!shapeCanMove(0, 1)) {
+            score.addPieceDropped();
+
+            for (BoardListener listener : listeners) {
+                listener.userEvent("bottom");
+            }
+        }
     }
 
     /**
@@ -323,14 +330,6 @@ public class Board implements ActionListener {
         // Si on peut, on déplace la pièce vers le bas
         if (shapeCanMove(0, 1)) {
             moveShape(0, 1);
-
-            // Si le prochain déplacement est impossible, on est en bas
-            // On envoie tout de suite l'évènement pour pas attendre
-            if (!shapeCanMove(0, 1)) {
-                for (BoardListener listener : listeners) {
-                    listener.userEvent("bottom");
-                }
-            }
         }
         else {
             // La pièce s'arrête de descendre
@@ -419,7 +418,6 @@ public class Board implements ActionListener {
     private void handleHighScore() {
         if (highscores.isHighScore(score)) {
             for (BoardListener listener : listeners) {
-                score.setTime(seconds);
                 score.setVShapeActive(vShapeActive);
                 listener.newHighScore(score);
             }
@@ -437,7 +435,7 @@ public class Board implements ActionListener {
     }
 
     private void clock() {
-        seconds++;
+        score.addSecond();
         for (BoardListener listener : listeners) {
             listener.clockChanged();
         }
@@ -491,7 +489,7 @@ public class Board implements ActionListener {
     }
 
     public int getSeconds() {
-        return seconds;
+        return score.getSeconds();
     }
 
     public Shape getNextShape(int index) {
