@@ -60,6 +60,7 @@ public class Board implements ActionListener {
         vShapeActive = App.prefs.getBoolean("vshape", true);
 
         endTimer.stop();
+        gameTimer.setDelay(1000);
 
         // Initialisation des cases à 'vide'
         for (int y = 0; y < getHeight(); y++) {
