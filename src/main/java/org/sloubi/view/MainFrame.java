@@ -291,6 +291,12 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
     }
 
     @Override
+    public void howToPlayClicked() {
+        new HowToPlayDialog();
+        requestFocus();
+    }
+
+    @Override
     public void optionsClicked() {
         new OptionsDialog(board.getState());
         leftSidebar.updateLayout();
