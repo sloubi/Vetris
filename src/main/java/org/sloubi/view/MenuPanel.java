@@ -16,6 +16,7 @@ public class MenuPanel extends RoundedPanel implements ActionListener {
     private final JButton game = new JButton("Resume");
     private final JButton options = new JButton("Options");
     private final JButton highscores = new JButton("HighScores");
+    private final JButton howToPlay = new JButton("How to play?");
     private final JButton about = new JButton("About");
     private final JButton quit = new JButton("Quit");
     private Board.GameState state = Board.GameState.Paused;
@@ -27,10 +28,11 @@ public class MenuPanel extends RoundedPanel implements ActionListener {
         initButton(game);
         initButton(options);
         initButton(highscores);
+        initButton(howToPlay);
         initButton(about);
         initButton(quit);
 
-        setBorder(BorderFactory.createEmptyBorder(110, 10, 0, 10));
+        setBorder(BorderFactory.createEmptyBorder(100, 10, 20, 10));
         setTitle("PAUSED");
         setTitleColor(new Color(228, 80, 0));
         setTitleSize(35f);
@@ -99,6 +101,11 @@ public class MenuPanel extends RoundedPanel implements ActionListener {
         else if (e.getSource().equals(highscores)) {
             for (MenuListener listener : listeners) {
                 listener.highScoresClicked();
+            }
+        }
+        else if (e.getSource().equals(howToPlay)) {
+            for (MenuListener listener : listeners) {
+                listener.howToPlayClicked();
             }
         }
         else if (e.getSource().equals(about)) {

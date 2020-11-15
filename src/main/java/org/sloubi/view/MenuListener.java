@@ -6,5 +6,6 @@ public interface MenuListener {
     void quitClicked();
     void optionsClicked();
     void highScoresClicked();
+    void howToPlayClicked();
     void aboutClicked();
 }
