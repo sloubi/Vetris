@@ -53,7 +53,5 @@ public class BoardPanel extends JPanel implements SquareDrawer {
 
         setPreferredSize(new Dimension(board.getWidth() * squareSize + squareBorder * (board.getWidth() - 1),
                 board.getHeight() * squareSize + squareBorder * (board.getHeight() - 1)));
-//        setSize(new Dimension(board.getWidth() * squareSize + squareBorder * (board.getWidth() - 1),
-//                board.getHeight() * squareSize + squareBorder * (board.getHeight() - 1)));
     }
 }

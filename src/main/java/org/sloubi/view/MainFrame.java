@@ -238,8 +238,8 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
     @Override
     public void newHighScore(Score score) {
         String response = JOptionPane.showInputDialog(this,
-                board.getScore().getScore() + " est un nouveau record ! Quel est ton nom ?",
-                "Nouveau record !",
+                board.getScore().getScore() + " is a new highscore! What's your name?",
+                "New record!",
                 JOptionPane.INFORMATION_MESSAGE);
         if (response != null) {
             score.setName(response);
