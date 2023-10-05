@@ -76,8 +76,7 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
             ButtonModel model = (ButtonModel) e.getSource();
             if (model.isRollover()) {
                 closeButton.setBackground(new Color(168, 21, 21));
-            }
-            else {
+            } else {
                 closeButton.setBackground(new Color(12, 12, 12));
             }
         });
@@ -105,9 +104,15 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         setResizable(false);
         setUndecorated(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
+
+        if (App.prefs.getBoolean("fullScreen", false)) {
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+        } else {
+            pack();
+            setLocationByPlatform(true);
+        }
+
         setVisible(true);
-        setLocationRelativeTo(null);
     }
 
     public void quit() {
@@ -135,11 +140,15 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
     public void updateSize() {
         boardPanel.updateSize();
         boardPanelContainer.revalidate();
-        pack();
+
+        if (!App.prefs.getBoolean("fullScreen", false)) {
+            pack();
+        }
     }
 
     /**
      * Close App
+     *
      * @param e Event
      */
     @Override
@@ -156,31 +165,23 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             board.tryToMove(0, 1);
-        }
-        else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
             board.tryToMove(1, 0);
-        }
-        else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+        } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             board.tryToMove(-1, 0);
-        }
-        else if (e.getKeyCode() == KeyEvent.VK_UP) {
+        } else if (e.getKeyCode() == KeyEvent.VK_UP) {
             board.rotateShape(true);
-        }
-        else if (e.getKeyChar() == 'z') {
+        } else if (e.getKeyChar() == 'z') {
             board.rotateShape(false);
-        }
-        else if (e.getKeyChar() == 'c') {
+        } else if (e.getKeyChar() == 'c') {
             board.hold();
-        }
-        else if (e.getKeyCode() == KeyEvent.VK_PAUSE || e.getKeyCode() == KeyEvent.VK_ESCAPE || e.getKeyCode() == KeyEvent.VK_ENTER) {
+        } else if (e.getKeyCode() == KeyEvent.VK_PAUSE || e.getKeyCode() == KeyEvent.VK_ESCAPE || e.getKeyCode() == KeyEvent.VK_ENTER) {
             if (board.getState() == Board.GameState.Over) {
                 board.start();
-            }
-            else {
+            } else {
                 pause();
             }
-        }
-        else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+        } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             board.hardDrop();
         }
     }
@@ -213,8 +214,7 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         if (App.prefs.getBoolean("music", true)) {
             if (board.getState() != Board.GameState.InGame) {
                 App.gameClip.stop();
-            }
-            else {
+            } else {
                 App.gameClip.loop(Clip.LOOP_CONTINUOUSLY);
                 App.gameClip.start();
             }

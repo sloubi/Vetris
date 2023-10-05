@@ -96,6 +96,7 @@ public class Board implements ActionListener {
 
     /**
      * Récupère une case
+     *
      * @param x Abscisse
      * @param y Ordonnée
      * @return La case
@@ -106,6 +107,7 @@ public class Board implements ActionListener {
 
     /**
      * La pièce peut-elle se déplacer de moveX ou moveY ?
+     *
      * @param moveX Déplacement X
      * @param moveY Déplacement Y
      * @return Vrai si la pièce peut bouger
@@ -188,6 +190,7 @@ public class Board implements ActionListener {
 
     /**
      * Est-ce que la ligne y est complète ?
+     *
      * @param y L'ordonnée de la ligne à vérifier
      * @return Vrai si ligne complète
      */
@@ -201,6 +204,7 @@ public class Board implements ActionListener {
 
     /**
      * Suppression d'une ligne complète et décalage de tout ce qui se trouve au dessus
+     *
      * @param yToRemove Ordonnée de la ligne complète
      */
     private void removeLine(int yToRemove) {
@@ -209,8 +213,7 @@ public class Board implements ActionListener {
                 if (y == 0) {
                     map[y][x].setState(Square.State.Empty);
                     map[y][x].setColor(null);
-                }
-                else {
+                } else {
                     map[y][x].setState(map[y - 1][x].getState());
                     map[y][x].setColor(map[y - 1][x].getColor());
                 }
@@ -285,6 +288,7 @@ public class Board implements ActionListener {
 
     /**
      * Applique un statut et une couleur sur les cases de la pièce
+     *
      * @param state Statut à appliquer
      * @param color Couleur à appliquer
      */
@@ -301,6 +305,7 @@ public class Board implements ActionListener {
 
     /**
      * Rotation de la pièce courante
+     *
      * @param clockwise Sens
      */
     public void rotateShape(boolean clockwise) {
@@ -331,8 +336,7 @@ public class Board implements ActionListener {
         // Si on peut, on déplace la pièce vers le bas
         if (shapeCanMove(0, 1)) {
             moveShape(0, 1);
-        }
-        else {
+        } else {
             // La pièce s'arrête de descendre
             stopShape();
             // On passe à la pièce suivante
@@ -351,6 +355,7 @@ public class Board implements ActionListener {
 
     /**
      * Un mouvement est demandé quand une touche de déplacement est pressée
+     *
      * @param moveX Déplacement X
      * @param moveY Déplacement Y
      */
@@ -377,6 +382,7 @@ public class Board implements ActionListener {
 
     /**
      * Augmentation du score en fonction du nombre de lignes supprimés d'un seul coup
+     *
      * @param nbOfLines Nombre de lignes complétées
      */
     private void increaseScore(int nbOfLines) {
@@ -447,8 +453,7 @@ public class Board implements ActionListener {
             state = GameState.Paused;
             gameTimer.stop();
             clockTimer.stop();
-        }
-        else if (state == GameState.Paused) {
+        } else if (state == GameState.Paused) {
             state = GameState.InGame;
             gameTimer.start();
             clockTimer.start();
@@ -479,12 +484,10 @@ public class Board implements ActionListener {
             for (BoardListener listener : listeners) {
                 listener.stateChanged();
             }
-        }
-        else if (endX ==  getWidth() - 1) {
+        } else if (endX == getWidth() - 1) {
             endX = 0;
             endY--;
-        }
-        else {
+        } else {
             endX++;
         }
     }
@@ -514,8 +517,7 @@ public class Board implements ActionListener {
                 shape = holdedShape;
                 shape.setY(0);
                 showShape();
-            }
-            else {
+            } else {
                 assignNewShape();
             }
 

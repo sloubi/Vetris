@@ -31,11 +31,6 @@ public class App
         initClips();
 
         MainFrame frame = new MainFrame();
-
-        int screen = 2;
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice[] gd = ge.getScreenDevices();
-        frame.setLocation(gd[screen].getDefaultConfiguration().getBounds().x, frame.getY());
     }
 
     public static void initFonts() {

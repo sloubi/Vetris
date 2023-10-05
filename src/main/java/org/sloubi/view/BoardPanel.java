@@ -32,15 +32,17 @@ public class BoardPanel extends JPanel implements SquareDrawer {
             for (int x = 0; x < board.getWidth(); x++) {
                 Square square = board.getSquare(x, y);
 
-                drawSquare(g2,
-                        square.getColor(),
-                        squareSize,
-                        squareBorder,
-                        0,
-                        0,
-                        x,
-                        y,
-                        square.hasGradient());
+                if (square != null) {
+                    drawSquare(g2,
+                            square.getColor(),
+                            squareSize,
+                            squareBorder,
+                            0,
+                            0,
+                            x,
+                            y,
+                            square.hasGradient());
+                }
             }
         }
     }

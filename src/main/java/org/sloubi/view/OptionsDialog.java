@@ -19,6 +19,7 @@ public class OptionsDialog extends JDialog {
 	private JCheckBox showTetriminosPerMinuteCheckBox;
     private JCheckBox showLinesPerMinuteCheckBox;
     private JCheckBox showSecondsCheckBox;
+    private JCheckBox fullScreenCheckBox;
     private final Board.GameState gameState;
 
     public OptionsDialog(Board.GameState gameState) {
@@ -71,12 +72,20 @@ public class OptionsDialog extends JDialog {
         showTetriminosPerMinuteCheckBox.setSelected(App.prefs.getBoolean("showTetriminosPerMinute", false));
         showLinesPerMinuteCheckBox.setSelected(App.prefs.getBoolean("showLinesPerMinute", false));
         showSecondsCheckBox.setSelected(App.prefs.getBoolean("showSeconds", false));
+        fullScreenCheckBox.setSelected(App.prefs.getBoolean("fullScreen", false));
 
         if (gameState == Board.GameState.InGame)
             vPieceCheckBox.setEnabled(false);
     }
 
     private void save() {
+        if (App.prefs.getBoolean("fullScreen", false) != fullScreenCheckBox.isSelected()) {
+            JOptionPane.showMessageDialog(null,
+                "You need to restart the game to apply your modification.",
+                "Full screen",
+                JOptionPane.INFORMATION_MESSAGE);
+        }
+
         App.prefs.putBoolean("music", musicCheckBox.isSelected());
         App.prefs.putBoolean("sound", soundEffectsCheckBox.isSelected());
         App.prefs.putBoolean("vshape", vPieceCheckBox.isSelected());
@@ -86,5 +95,6 @@ public class OptionsDialog extends JDialog {
         App.prefs.putBoolean("showTetriminosPerMinute", showTetriminosPerMinuteCheckBox.isSelected());
         App.prefs.putBoolean("showLinesPerMinute", showLinesPerMinuteCheckBox.isSelected());
         App.prefs.putBoolean("showSeconds", showSecondsCheckBox.isSelected());
+        App.prefs.putBoolean("fullScreen", fullScreenCheckBox.isSelected());
     }
 }
