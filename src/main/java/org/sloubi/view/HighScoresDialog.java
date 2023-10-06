@@ -21,10 +21,10 @@ public class HighScoresDialog extends JDialog {
     }
 }
 
-class HighScoresModel extends AbstractTableModel  {
+class HighScoresModel extends AbstractTableModel {
 
     private final HighScores hs;
-    private transient final String[] headers = {"Name", "Score", "Lines", "Level", "Time", "LPM", "TPM", "V Piece"};
+    private final transient String[] headers = {"Name", "Score", "Lines", "Level", "Time", "LPM", "TPM", "V Piece"};
 
     public HighScoresModel(HighScores hs) {
         this.hs = hs;
@@ -55,7 +55,7 @@ class HighScoresModel extends AbstractTableModel  {
             case 4 -> hs.get(rowIndex).getSeconds();
             case 5 -> hs.get(rowIndex).getLPM();
             case 6 -> hs.get(rowIndex).getTPM();
-            case 7 -> hs.get(rowIndex).isVShapeActive() ? "yes" : "no";
+            case 7 -> hs.get(rowIndex).isvShapeActive() ? "yes" : "no";
             default -> null;
         };
     }

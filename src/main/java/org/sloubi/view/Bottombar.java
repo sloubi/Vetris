@@ -12,8 +12,6 @@ public class Bottombar extends JPanel implements BoardListener {
     private final Board board;
     private final JLabel score = new JLabel();
     private final JLabel level = new JLabel();
-    private final Color labelColor = new Color(228, 80, 0);
-    private final Color valueColor = new Color(255, 255, 255);
 
     public Bottombar(Board board) {
         this.board = board;
@@ -22,6 +20,8 @@ public class Bottombar extends JPanel implements BoardListener {
         setBackground(Color.BLACK);
 
         Font font = App.barFont.deriveFont(24f);
+        Color labelColor = new Color(228, 80, 0);
+        Color valueColor = new Color(255, 255, 255);
 
         JLabel levelLabel = new JLabel("LEVEL");
         levelLabel.setFont(font);

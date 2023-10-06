@@ -7,16 +7,17 @@ import java.util.Iterator;
 
 
 public class HighScores implements Serializable, Iterable<Score> {
+    @Serial
     private static final long serialVersionUID = 8392154074028239629L;
 
     private final ArrayList<Score> scores = new ArrayList<>();
-    private transient static final String highScoreFilename = "highscore.ser";
-    private transient final int keeped = 5;
+    private static final String HIGHSCORE_FILENAME = "highscore.ser";
 
     public void add(Score s) {
         scores.add(s);
         scores.sort(Collections.reverseOrder());
 
+        int keeped = 5;
         if (scores.size() > keeped)
             scores.remove(scores.size() - 1);
     }
@@ -33,43 +34,25 @@ public class HighScores implements Serializable, Iterable<Score> {
     public static HighScores load() {
         HighScores highscores = new HighScores();
 
-        File file = new File(highScoreFilename);
+        File file = new File(HIGHSCORE_FILENAME);
         if (file.exists()) {
-            ObjectInputStream ois = null;
-            try {
-                ois = new ObjectInputStream(new FileInputStream(file));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                if (ois != null) {
-                    highscores = (HighScores) ois.readObject();
-                    ois.close();
-                }
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                highscores = (HighScores) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                throw new IllegalStateException(e);
             }
         }
+        
         return highscores;
     }
 
     public void save() {
-        File file = new File(highScoreFilename);
+        File file = new File(HIGHSCORE_FILENAME);
 
-        ObjectOutputStream oos;
-        try {
-            oos = new ObjectOutputStream(new FileOutputStream(file));
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
             oos.writeObject(this);
-            oos.close();
         } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void print() {
-        for (Score s : scores) {
-            System.out.println(s.getName() + " " + s.getScore());
+            throw new IllegalStateException(e);
         }
     }
 

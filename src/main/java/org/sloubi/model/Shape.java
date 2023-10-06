@@ -3,7 +3,7 @@ package org.sloubi.model;
 import java.awt.*;
 import java.util.Random;
 
-public class Shape implements Cloneable {
+public class Shape {
     protected Tetromino tetromino;
     protected int[][] squares;
     protected int x = 0;
@@ -58,10 +58,9 @@ public class Shape implements Cloneable {
         for (int r = 0; r < M; r++) {
             for (int c = 0; c < N; c++) {
                 if (clockwise) {
-                    res[c][M-1-r] = squares[r][c];
-                }
-                else {
-                    res[N-1-c][r] = squares[r][c];
+                    res[c][M - 1 - r] = squares[r][c];
+                } else {
+                    res[N - 1 - c][r] = squares[r][c];
                 }
             }
         }
@@ -73,15 +72,6 @@ public class Shape implements Cloneable {
         int rotation = random.nextInt(tetromino.possibleWays);
         for (int i = 0; i < rotation; i++)
             rotate(true);
-    }
-
-    public void print() {
-         for (int y = 0; y < getHeight(); y++) {
-            for (int x = 0; x < getWidth(); x++) {
-                System.out.print(getSquare(x, y));
-            }
-            System.out.println();
-        }
     }
 
 }

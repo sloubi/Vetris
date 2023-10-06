@@ -4,7 +4,9 @@ import org.sloubi.App;
 import org.sloubi.model.Board;
 
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class OptionsDialog extends JDialog {
     private JPanel contentPane;
@@ -16,7 +18,7 @@ public class OptionsDialog extends JDialog {
     private JCheckBox musicCheckBox;
     private JCheckBox vPieceCheckBox;
     private JCheckBox soundEffectsCheckBox;
-	private JCheckBox showTetriminosPerMinuteCheckBox;
+    private JCheckBox showTetriminosPerMinuteCheckBox;
     private JCheckBox showLinesPerMinuteCheckBox;
     private JCheckBox showSecondsCheckBox;
     private JCheckBox fullScreenCheckBox;
@@ -39,6 +41,7 @@ public class OptionsDialog extends JDialog {
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 onCancel();
             }
@@ -74,16 +77,16 @@ public class OptionsDialog extends JDialog {
         showSecondsCheckBox.setSelected(App.prefs.getBoolean("showSeconds", false));
         fullScreenCheckBox.setSelected(App.prefs.getBoolean("fullScreen", false));
 
-        if (gameState == Board.GameState.InGame)
+        if (gameState == Board.GameState.IN_GAME)
             vPieceCheckBox.setEnabled(false);
     }
 
     private void save() {
         if (App.prefs.getBoolean("fullScreen", false) != fullScreenCheckBox.isSelected()) {
             JOptionPane.showMessageDialog(null,
-                "You need to restart the game to apply your modification.",
-                "Full screen",
-                JOptionPane.INFORMATION_MESSAGE);
+                    "You need to restart the game to apply your modification.",
+                    "Full screen",
+                    JOptionPane.INFORMATION_MESSAGE);
         }
 
         App.prefs.putBoolean("music", musicCheckBox.isSelected());

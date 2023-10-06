@@ -14,8 +14,8 @@ public class Board implements ActionListener {
 
     // Statuts du jeu
     public enum GameState {
-        InGame("In game"), Paused("Paused"), Over("Game Over");
-        String name;
+        IN_GAME("In game"), PAUSED("Paused"), OVER("Game Over");
+        final String name;
 
         GameState(String name) {
             this.name = name;
@@ -33,7 +33,7 @@ public class Board implements ActionListener {
     private final Random random = new Random();
     private final List<Shape> nextShapes = new ArrayList<>();
     private final Square[][] map = new Square[22][10];
-    private GameState state = GameState.InGame;
+    private GameState state = GameState.IN_GAME;
     private Score score = new Score();
     private final List<BoardListener> listeners = new ArrayList<>();
     private final Timer gameTimer = new Timer(1000, this);
@@ -52,7 +52,7 @@ public class Board implements ActionListener {
     }
 
     public void start() {
-        state = GameState.InGame;
+        state = GameState.IN_GAME;
         holdedShape = null;
         holdLocked = false;
         score = new Score();
@@ -65,7 +65,7 @@ public class Board implements ActionListener {
         // Initialisation des cases à 'vide'
         for (int y = 0; y < getHeight(); y++) {
             for (int x = 0; x < getWidth(); x++) {
-                map[y][x] = new Square(Square.State.Empty);
+                map[y][x] = new Square(Square.State.EMPTY);
             }
         }
 
@@ -113,13 +113,14 @@ public class Board implements ActionListener {
      * @return Vrai si la pièce peut bouger
      */
     private boolean shapeCanMove(int moveX, int moveY) {
-        int newX, newY;
+        int newX;
+        int newY;
         for (int y = 0; y < shape.getHeight(); y++) {
             for (int x = 0; x < shape.getWidth(); x++) {
                 newX = x + shape.getX() + moveX;
                 newY = y + shape.getY() + moveY;
                 if (newY < 0 || newX < 0 || newY >= getHeight() || newX >= getWidth() ||
-                        shape.getSquare(x, y) == 1 && map[newY][newX].getState() == Square.State.Filled) {
+                        shape.getSquare(x, y) == 1 && map[newY][newX].getState() == Square.State.FILLED) {
                     return false;
                 }
             }
@@ -129,14 +130,14 @@ public class Board implements ActionListener {
 
     private void moveShape(int moveX, int moveY) {
         // On efface la pièce à l'ancienne position
-        updateSquares(Square.State.Empty, null);
+        updateSquares(Square.State.EMPTY, null);
 
         // On met à jour les coordonnées avec le mouvement demandé
         shape.setX(shape.getX() + moveX);
         shape.setY(shape.getY() + moveY);
 
         // On déplace
-        updateSquares(Square.State.Current, shape.getColor());
+        updateSquares(Square.State.CURRENT, shape.getColor());
 
         // Si le prochain déplacement est impossible, on est en bas
         if (!shapeCanMove(0, 1)) {
@@ -152,7 +153,7 @@ public class Board implements ActionListener {
      * La pièce est lachée en bas directement
      */
     public void hardDrop() {
-        if (state == GameState.InGame) {
+        if (state == GameState.IN_GAME) {
             int moveY = 1;
             while (shapeCanMove(0, moveY)) {
                 moveY++;
@@ -196,7 +197,7 @@ public class Board implements ActionListener {
      */
     private boolean isFullLine(int y) {
         for (int x = 0; x < getWidth(); x++) {
-            if (map[y][x].getState() == Square.State.Empty)
+            if (map[y][x].getState() == Square.State.EMPTY)
                 return false;
         }
         return true;
@@ -211,7 +212,7 @@ public class Board implements ActionListener {
         for (int y = yToRemove; y >= 0; y--) {
             for (int x = 0; x < getWidth(); x++) {
                 if (y == 0) {
-                    map[y][x].setState(Square.State.Empty);
+                    map[y][x].setState(Square.State.EMPTY);
                     map[y][x].setColor(null);
                 } else {
                     map[y][x].setState(map[y - 1][x].getState());
@@ -257,7 +258,7 @@ public class Board implements ActionListener {
         for (BoardListener listener : listeners) {
             listener.nextShapeChanged();
 
-            if (shape.tetromino.equals(Tetromino.VShape)) {
+            if (shape.tetromino.equals(Tetromino.V_SHAPE)) {
                 listener.userEvent("vShape");
             }
         }
@@ -271,14 +272,14 @@ public class Board implements ActionListener {
      * Apparition d'une pièce
      */
     private void showShape() {
-        updateSquares(Square.State.Current, shape.getColor());
+        updateSquares(Square.State.CURRENT, shape.getColor());
     }
 
     /**
      * Passage des cases de la pièce de Current à Filled
      */
     private void stopShape() {
-        updateSquares(Square.State.Filled, shape.getColor());
+        updateSquares(Square.State.FILLED, shape.getColor());
 
         // Si une ou plusieurs lignes sont complètes, on les enlève
         checkLines();
@@ -309,8 +310,8 @@ public class Board implements ActionListener {
      * @param clockwise Sens
      */
     public void rotateShape(boolean clockwise) {
-        if (state == GameState.InGame) {
-            updateSquares(Square.State.Empty, null);
+        if (state == GameState.IN_GAME) {
+            updateSquares(Square.State.EMPTY, null);
             shape.rotate(clockwise);
 
             // Pour éviter le débordement du tableau, si la pièce dépasse, on la décale vers la gauche
@@ -318,7 +319,7 @@ public class Board implements ActionListener {
                 shape.setX(shape.getX() - 1);
             }
 
-            updateSquares(Square.State.Current, shape.getColor());
+            updateSquares(Square.State.CURRENT, shape.getColor());
 
             for (BoardListener listener : listeners) {
                 listener.boardChanged();
@@ -360,14 +361,12 @@ public class Board implements ActionListener {
      * @param moveY Déplacement Y
      */
     public void tryToMove(int moveX, int moveY) {
-        if (state == GameState.InGame) {
-            if (shapeCanMove(moveX, moveY)) {
-                moveShape(moveX, moveY);
+        if (state == GameState.IN_GAME && shapeCanMove(moveX, moveY)) {
+            moveShape(moveX, moveY);
 
-                for (BoardListener listener : listeners) {
-                    listener.boardChanged();
-                    listener.userEvent("move");
-                }
+            for (BoardListener listener : listeners) {
+                listener.boardChanged();
+                listener.userEvent("move");
             }
         }
     }
@@ -404,7 +403,7 @@ public class Board implements ActionListener {
     }
 
     private void gameOver() {
-        state = GameState.Over;
+        state = GameState.OVER;
         gameTimer.stop();
         clockTimer.stop();
 
@@ -425,7 +424,7 @@ public class Board implements ActionListener {
     private void handleHighScore() {
         if (highscores.isHighScore(score)) {
             for (BoardListener listener : listeners) {
-                score.setVShapeActive(vShapeActive);
+                score.setvShapeActive(vShapeActive);
                 listener.newHighScore(score);
             }
         }
@@ -449,12 +448,12 @@ public class Board implements ActionListener {
     }
 
     public void pause() {
-        if (state == GameState.InGame) {
-            state = GameState.Paused;
+        if (state == GameState.IN_GAME) {
+            state = GameState.PAUSED;
             gameTimer.stop();
             clockTimer.stop();
-        } else if (state == GameState.Paused) {
-            state = GameState.InGame;
+        } else if (state == GameState.PAUSED) {
+            state = GameState.IN_GAME;
             gameTimer.start();
             clockTimer.start();
         }
@@ -472,7 +471,7 @@ public class Board implements ActionListener {
      * Animation de fin
      */
     private void fillBoard() {
-        map[endY][endX].setState(Square.State.End);
+        map[endY][endX].setState(Square.State.END);
 
         for (BoardListener listener : listeners) {
             listener.boardChanged();
@@ -507,7 +506,7 @@ public class Board implements ActionListener {
     public void hold() {
         if (!holdLocked) {
             holdLocked = true;
-            updateSquares(Square.State.Empty, null);
+            updateSquares(Square.State.EMPTY, null);
             for (BoardListener listener : listeners) {
                 listener.boardChanged();
             }

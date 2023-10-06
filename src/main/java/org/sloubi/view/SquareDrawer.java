@@ -18,8 +18,8 @@ public interface SquareDrawer {
                     x1,
                     y1,
                     squareColor.darker(),
-                    offsetX + x * squareSize + borderSize * x + squareSize,
-                    offsetY + y * squareSize + borderSize * y + squareSize,
+                    (float) offsetX + x * squareSize + borderSize * x + squareSize,
+                    (float) offsetY + y * squareSize + borderSize * y + squareSize,
                     new Color(255, 255, 255, 0));
             g2.setPaint(gp);
             g2.fill(rect);

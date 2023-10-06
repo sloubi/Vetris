@@ -1,5 +1,6 @@
 package org.sloubi.view;
 
+import org.sloubi.App;
 import org.sloubi.model.Shape;
 import org.sloubi.model.Tetromino;
 
@@ -39,7 +40,7 @@ public class AboutDialog extends JDialog {
     }
 
     private void initIcon() {
-        icon = new ShapePanel(new Shape(Tetromino.VShape), 20, 1);
+        icon = new ShapePanel(new Shape(Tetromino.V_SHAPE), 20, 1);
     }
 
     private void initLink() {
@@ -49,21 +50,14 @@ public class AboutDialog extends JDialog {
         link.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         link.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mouseClicked(MouseEvent e) {
                 try {
                     Desktop.getDesktop().browse(new URI("https://sloubi.eu"));
-                } catch (IOException | URISyntaxException e1) {
-                    e1.printStackTrace();
+                } catch (IOException | URISyntaxException ex) {
+                    throw new IllegalStateException(ex);
                 }
             }
-
-            @Override
-            public void mouseExited(MouseEvent e) { }
-
-            @Override
-            public void mouseEntered(MouseEvent e) { }
         });
     }
 
@@ -79,7 +73,7 @@ public class AboutDialog extends JDialog {
         gbc.insets = new Insets(0, 20, 0, 0);
 
 
-        JLabel title = new JLabel("Vetris v1");
+        JLabel title = new JLabel("Vetris " + App.VERSION);
         textPane.add(title, gbc);
 
         JPanel authorPane = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));

@@ -103,10 +103,10 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         setTitle("Vetris");
         setResizable(false);
         setUndecorated(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         if (App.prefs.getBoolean("fullScreen", false)) {
-            setExtendedState(JFrame.MAXIMIZED_BOTH);
+            setExtendedState(Frame.MAXIMIZED_BOTH);
         } else {
             pack();
             setLocationByPlatform(true);
@@ -121,12 +121,12 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
 
     public void pause() {
         board.pause();
-        boardPanelContainer.setVisible(board.getState() == Board.GameState.InGame);
+        boardPanelContainer.setVisible(board.getState() == Board.GameState.IN_GAME);
         menu.setState(board.getState());
-        menu.setVisible(board.getState() == Board.GameState.Paused);
+        menu.setVisible(board.getState() == Board.GameState.PAUSED);
 
         // Seulement quand le plateau de jeu est affiché, sinon la fenêtre se base sur la taille du menu
-        if (board.getState() == Board.GameState.InGame) {
+        if (board.getState() == Board.GameState.IN_GAME) {
             updateSize();
         }
     }
@@ -176,7 +176,7 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         } else if (e.getKeyChar() == 'c') {
             board.hold();
         } else if (e.getKeyCode() == KeyEvent.VK_PAUSE || e.getKeyCode() == KeyEvent.VK_ESCAPE || e.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (board.getState() == Board.GameState.Over) {
+            if (board.getState() == Board.GameState.OVER) {
                 board.start();
             } else {
                 pause();
@@ -212,7 +212,7 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
 
         // Quand on est en pause, la musique s'arrête
         if (App.prefs.getBoolean("music", true)) {
-            if (board.getState() != Board.GameState.InGame) {
+            if (board.getState() != Board.GameState.IN_GAME) {
                 App.gameClip.stop();
             } else {
                 App.gameClip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -220,7 +220,7 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
             }
         }
 
-        if (board.getState() == Board.GameState.Over) {
+        if (board.getState() == Board.GameState.OVER) {
             gameOver();
         }
     }
@@ -319,14 +319,17 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
             this.frame = frame;
         }
 
+        @Override
         public void mouseReleased(MouseEvent e) {
             mouseDownCompCoords = null;
         }
 
+        @Override
         public void mousePressed(MouseEvent e) {
             mouseDownCompCoords = e.getPoint();
         }
 
+        @Override
         public void mouseDragged(MouseEvent e) {
             Point currCoords = e.getLocationOnScreen();
             frame.setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);

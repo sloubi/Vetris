@@ -1,17 +1,16 @@
 package org.sloubi.model;
 
-import org.sloubi.App;
-
+import java.io.Serial;
 import java.io.Serializable;
 
 public class Score implements Comparable<Score>, Serializable {
+    @Serial
     private static final long serialVersionUID = -4401162744040333360L;
     private int score;
     private int lines;
     private int seconds;
     private int level = 1;
-    private boolean VShapeActive = true;
-    private final String version = App.version;
+    private boolean vShapeActive = true;
     private String name;
     private int piecesDropped = 0;
 
@@ -35,10 +34,6 @@ public class Score implements Comparable<Score>, Serializable {
         return level;
     }
 
-    public int getPiecesDropped() {
-        return piecesDropped;
-    }
-
     /**
      * @return Lines per minute
      */
@@ -53,13 +48,13 @@ public class Score implements Comparable<Score>, Serializable {
         return seconds != 0 ? Math.round((float) piecesDropped / (float) seconds * 60) : 0;
     }
 
-    public boolean isVShapeActive() {
-        return VShapeActive;
+    public boolean isvShapeActive() {
+        return vShapeActive;
     }
 
     public void setName(String name) {
         name = name.trim();
-        if (name.equals("")) name = "Anonymous";
+        if (name.isEmpty()) name = "Anonymous";
         this.name = name;
     }
 
@@ -67,8 +62,8 @@ public class Score implements Comparable<Score>, Serializable {
         seconds++;
     }
 
-    public void setVShapeActive(boolean VShapeActive) {
-        this.VShapeActive = VShapeActive;
+    public void setvShapeActive(boolean vShapeActive) {
+        this.vShapeActive = vShapeActive;
     }
 
     @Override
@@ -102,6 +97,7 @@ public class Score implements Comparable<Score>, Serializable {
 
     /**
      * Met à jour le niveau
+     *
      * @return True si le niveau a changé
      */
     public boolean updateLevel() {
@@ -115,10 +111,6 @@ public class Score implements Comparable<Score>, Serializable {
 
     public void addPieceDropped() {
         piecesDropped++;
-    }
-
-    public void setLines(int lines) {
-        this.lines = lines;
     }
 
     @Override

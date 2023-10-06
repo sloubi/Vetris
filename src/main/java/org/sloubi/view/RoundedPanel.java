@@ -28,22 +28,21 @@ public class RoundedPanel extends JPanel {
         Graphics2D g2 = (Graphics2D) g;
 
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON);
+                RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2.setColor(borderColor);
         g2.setStroke(new BasicStroke(borderSize));
 
         if (filled) {
             g2.fillRoundRect(
-                borderSize / 2, borderSize / 2,
-                getWidth() - borderSize - 1, getHeight() - borderSize - 1,
-                arcs.width, arcs.height);
-        }
-        else {
-             g2.drawRoundRect(
-                borderSize / 2, borderSize / 2,
-                getWidth() - borderSize - 1, getHeight() - borderSize - 1,
-                arcs.width, arcs.height);
+                    borderSize / 2, borderSize / 2,
+                    getWidth() - borderSize - 1, getHeight() - borderSize - 1,
+                    arcs.width, arcs.height);
+        } else {
+            g2.drawRoundRect(
+                    borderSize / 2, borderSize / 2,
+                    getWidth() - borderSize - 1, getHeight() - borderSize - 1,
+                    arcs.width, arcs.height);
         }
 
         if (title != null) {

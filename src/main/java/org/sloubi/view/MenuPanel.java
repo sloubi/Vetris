@@ -19,7 +19,7 @@ public class MenuPanel extends RoundedPanel implements ActionListener {
     private final JButton howToPlay = new JButton("How to play?");
     private final JButton about = new JButton("About");
     private final JButton quit = new JButton("Quit");
-    private Board.GameState state = Board.GameState.Paused;
+    private Board.GameState state = Board.GameState.PAUSED;
 
     public MenuPanel() {
         setLayout(new GridLayout(6, 1, 0, 10));
@@ -52,10 +52,12 @@ public class MenuPanel extends RoundedPanel implements ActionListener {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         button.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseEntered(MouseEvent evt) {
                 button.setBackground(new Color(228, 80, 0));
             }
 
+            @Override
             public void mouseExited(MouseEvent evt) {
                 button.setBackground(Color.black);
             }
@@ -64,8 +66,7 @@ public class MenuPanel extends RoundedPanel implements ActionListener {
             ButtonModel model = (ButtonModel) e.getSource();
             if (model.isRollover()) {
                 button.setBackground(new Color(228, 80, 0));
-            }
-            else {
+            } else {
                 button.setBackground(Color.black);
             }
         });
@@ -82,33 +83,28 @@ public class MenuPanel extends RoundedPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(game)) {
             for (MenuListener listener : listeners) {
-                if (state == Board.GameState.Paused)
+                if (state == Board.GameState.PAUSED)
                     listener.resumeClicked();
                 else
                     listener.newGameClicked();
             }
-        }
-        else if (e.getSource().equals(quit)) {
+        } else if (e.getSource().equals(quit)) {
             for (MenuListener listener : listeners) {
                 listener.quitClicked();
             }
-        }
-        else if (e.getSource().equals(options)) {
+        } else if (e.getSource().equals(options)) {
             for (MenuListener listener : listeners) {
                 listener.optionsClicked();
             }
-        }
-        else if (e.getSource().equals(highscores)) {
+        } else if (e.getSource().equals(highscores)) {
             for (MenuListener listener : listeners) {
                 listener.highScoresClicked();
             }
-        }
-        else if (e.getSource().equals(howToPlay)) {
+        } else if (e.getSource().equals(howToPlay)) {
             for (MenuListener listener : listeners) {
                 listener.howToPlayClicked();
             }
-        }
-        else if (e.getSource().equals(about)) {
+        } else if (e.getSource().equals(about)) {
             for (MenuListener listener : listeners) {
                 listener.aboutClicked();
             }
@@ -116,11 +112,10 @@ public class MenuPanel extends RoundedPanel implements ActionListener {
     }
 
     public void update() {
-        if (state == Board.GameState.Paused) {
+        if (state == Board.GameState.PAUSED) {
             game.setText("Resume");
             setTitle("PAUSED");
-        }
-        else {
+        } else {
             game.setText("New game");
             setTitle("GAME OVER");
         }

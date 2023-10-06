@@ -11,7 +11,7 @@ public class BackgroundContainer extends JPanel {
 
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                           RenderingHints.VALUE_ANTIALIAS_ON);
+                RenderingHints.VALUE_ANTIALIAS_ON);
 
         Color color1 = new Color(12, 12, 12);
         Color color2 = new Color(25, 29, 35);
