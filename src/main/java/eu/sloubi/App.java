@@ -4,6 +4,7 @@ import eu.sloubi.view.MainFrame;
 
 import javax.sound.sampled.*;
 import java.awt.*;
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.prefs.Preferences;
@@ -56,9 +57,9 @@ public class App {
     }
 
     public static void initClips() {
-        InputStream is = MainFrame.class.getResourceAsStream("/sounds/tetris-ragtime.wav");
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(MainFrame.class.getResourceAsStream("/sounds/tetris-ragtime.wav"));
         try {
-            AudioInputStream ais = AudioSystem.getAudioInputStream(is);
+            AudioInputStream ais = AudioSystem.getAudioInputStream(bufferedInputStream);
             gameClip.open(ais);
             gameClip.loop(Clip.LOOP_CONTINUOUSLY);
             gameClip.stop();
@@ -77,10 +78,9 @@ public class App {
     }
 
     private static void initClip(Clip clip, String filename) {
-        InputStream is = MainFrame.class.getResourceAsStream(filename);
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(MainFrame.class.getResourceAsStream(filename));
         try {
-            assert is != null;
-            AudioInputStream ais = AudioSystem.getAudioInputStream(is);
+            AudioInputStream ais = AudioSystem.getAudioInputStream(bufferedInputStream);
             clip.open(ais);
         } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
             throw new IllegalStateException(e);
