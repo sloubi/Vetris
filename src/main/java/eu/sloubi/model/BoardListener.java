@@ -1,4 +1,4 @@
-package org.sloubi.model;
+package eu.sloubi.model;
 
 public interface BoardListener {
     void boardChanged();

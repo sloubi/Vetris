@@ -1,6 +1,6 @@
-package org.sloubi.view;
+package eu.sloubi.view;
 
-import org.sloubi.App;
+import eu.sloubi.App;
 
 import javax.swing.*;
 import java.awt.*;

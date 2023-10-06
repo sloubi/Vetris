@@ -1,4 +1,4 @@
-package org.sloubi.model;
+package eu.sloubi.model;
 
 import java.awt.*;
 import java.util.Random;

@@ -1,4 +1,4 @@
-package org.sloubi.view;
+package eu.sloubi.view;
 
 public interface MenuListener {
     void resumeClicked();

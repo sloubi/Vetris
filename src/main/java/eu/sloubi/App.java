@@ -1,6 +1,6 @@
-package org.sloubi;
+package eu.sloubi;
 
-import org.sloubi.view.MainFrame;
+import eu.sloubi.view.MainFrame;
 
 import javax.sound.sampled.*;
 import java.awt.*;
@@ -21,7 +21,7 @@ public class App {
     public static final Clip pop2Clip;
     public static final Clip clickClip;
 
-    public static final Preferences prefs = Preferences.userNodeForPackage(org.sloubi.App.class);
+    public static final Preferences prefs = Preferences.userNodeForPackage(App.class);
     public static final String VERSION = "1.0";
 
     static {

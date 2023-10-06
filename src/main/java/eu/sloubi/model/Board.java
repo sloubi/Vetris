@@ -1,6 +1,6 @@
-package org.sloubi.model;
+package eu.sloubi.model;
 
-import org.sloubi.App;
+import eu.sloubi.App;
 
 import javax.swing.Timer;
 import java.awt.*;

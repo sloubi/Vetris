@@ -1,4 +1,4 @@
-package org.sloubi.view;
+package eu.sloubi.view;
 
 import javax.swing.*;
 

@@ -1,17 +1,17 @@
-package org.sloubi.view;
+package eu.sloubi.view;
 
-import org.sloubi.App;
-import org.sloubi.model.Shape;
+import eu.sloubi.model.Shape;
+import eu.sloubi.App;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ShapePanel extends JPanel implements SquareDrawer {
-    private Shape shape;
+    private eu.sloubi.model.Shape shape;
     private final int squareSize;
     private final int borderSize;
 
-    public ShapePanel(Shape shape, int squareSize, int borderSize) {
+    public ShapePanel(eu.sloubi.model.Shape shape, int squareSize, int borderSize) {
         this.shape = shape;
         this.squareSize = squareSize;
         this.borderSize = borderSize;

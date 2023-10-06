@@ -1,7 +1,7 @@
-package org.sloubi.view;
+package eu.sloubi.view;
 
-import org.sloubi.App;
-import org.sloubi.model.Board;
+import eu.sloubi.App;
+import eu.sloubi.model.Board;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;

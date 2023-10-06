@@ -1,8 +1,8 @@
-package org.sloubi.view;
+package eu.sloubi.view;
 
-import org.sloubi.App;
-import org.sloubi.model.Shape;
-import org.sloubi.model.Tetromino;
+import eu.sloubi.model.Shape;
+import eu.sloubi.model.Tetromino;
+import eu.sloubi.App;
 
 import javax.swing.*;
 import java.awt.*;

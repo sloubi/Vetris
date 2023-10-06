@@ -1,4 +1,6 @@
-package org.sloubi.model;
+package eu.sloubi.model;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ public class HighScores implements Serializable, Iterable<Score> {
         scores.add(s);
         scores.sort(Collections.reverseOrder());
 
-        int keeped = 5;
+        int keeped = 10;
         if (scores.size() > keeped)
             scores.remove(scores.size() - 1);
     }
@@ -42,7 +44,7 @@ public class HighScores implements Serializable, Iterable<Score> {
                 throw new IllegalStateException(e);
             }
         }
-        
+
         return highscores;
     }
 

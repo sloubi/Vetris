@@ -1,6 +1,6 @@
-package org.sloubi.view;
+package eu.sloubi.view;
 
-import org.sloubi.model.HighScores;
+import eu.sloubi.model.HighScores;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
