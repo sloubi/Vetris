@@ -3,6 +3,7 @@ package eu.sloubi.model;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import eu.sloubi.App;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class HighScores implements Iterable<Score> {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public HighScores() {
+        objectMapper.registerModule(new JavaTimeModule());
         load();
     }
 

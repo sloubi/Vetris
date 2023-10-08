@@ -2,6 +2,8 @@ package eu.sloubi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.time.LocalDateTime;
+
 public class Score implements Comparable<Score> {
 
     private int score;
@@ -11,6 +13,7 @@ public class Score implements Comparable<Score> {
     private boolean vShapeActive = true;
     private String name;
     private int piecesDropped = 0;
+    private LocalDateTime dateTime;
 
     public int getScore() {
         return score;
@@ -34,6 +37,10 @@ public class Score implements Comparable<Score> {
 
     public int getPiecesDropped() {
         return piecesDropped;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
     /**
@@ -60,6 +67,10 @@ public class Score implements Comparable<Score> {
         name = name.trim();
         if (name.isEmpty()) name = "Anonymous";
         this.name = name;
+    }
+
+    public void setDateTime() {
+        this.dateTime = LocalDateTime.now();
     }
 
     public void addSecond() {

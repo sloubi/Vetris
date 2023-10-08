@@ -4,18 +4,23 @@ import eu.sloubi.model.HighScores;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 public class HighScoresDialog extends JDialog {
     public HighScoresDialog(HighScores hs) {
         JTable table = new JTable(new HighScoresModel(hs));
+        TableColumnModel colModel=table.getColumnModel();
+        colModel.getColumn(8).setPreferredWidth(200);
 
         getContentPane().add(new JScrollPane(table), BorderLayout.CENTER);
         setTitle("HighScores");
         setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setResizable(false);
-        pack();
+        setResizable(true);
+        setSize(800, 300);
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -23,8 +28,8 @@ public class HighScoresDialog extends JDialog {
 
 class HighScoresModel extends AbstractTableModel {
 
-    private final HighScores hs;
-    private final transient String[] headers = {"Name", "Score", "Lines", "Level", "Time", "LPM", "TPM", "V Piece"};
+    private final transient HighScores hs;
+    private final String[] headers = {"Name", "Score", "Lines", "Level", "Time", "LPM", "TPM", "V Piece", "Date"};
 
     public HighScoresModel(HighScores hs) {
         this.hs = hs;
@@ -56,6 +61,7 @@ class HighScoresModel extends AbstractTableModel {
             case 5 -> hs.get(rowIndex).getLPM();
             case 6 -> hs.get(rowIndex).getTPM();
             case 7 -> hs.get(rowIndex).isvShapeActive() ? "yes" : "no";
+            case 8 -> hs.get(rowIndex).getDateTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL, FormatStyle.MEDIUM));
             default -> null;
         };
     }

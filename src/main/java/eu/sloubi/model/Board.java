@@ -421,6 +421,7 @@ public class Board implements ActionListener {
         if (highscores.isHighScore(score)) {
             for (BoardListener listener : listeners) {
                 score.setvShapeActive(vShapeActive);
+                score.setDateTime();
                 listener.newHighScore(score);
             }
         }
