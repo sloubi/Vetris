@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ShapePanel extends JPanel implements SquareDrawer {
-    private eu.sloubi.model.Shape shape;
+    private Shape shape;
     private final int squareSize;
     private final int borderSize;
 
