@@ -101,6 +101,7 @@ public class LeftSidebar extends JPanel implements BoardListener {
     public void scoreChanged() {
         lines.setText(String.valueOf(board.getScore().getLines()));
         lpm.setText(String.valueOf(board.getScore().getLPM()));
+        tpm.setText(String.valueOf(board.getScore().getTPM()));
     }
 
     @Override

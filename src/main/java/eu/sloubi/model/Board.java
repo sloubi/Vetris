@@ -38,7 +38,7 @@ public class Board implements ActionListener {
     private final List<BoardListener> listeners = new ArrayList<>();
     private final Timer gameTimer = new Timer(1000, this);
     private final Timer clockTimer = new Timer(1000, this);
-    private final HighScores highscores;
+    private final HighScores highscores = new HighScores();
     private boolean holdLocked = false;
     private boolean vShapeActive = App.prefs.getBoolean("vshape", true);
 
@@ -46,10 +46,6 @@ public class Board implements ActionListener {
     private final Timer endTimer = new Timer(5, this);
     private int endX;
     private int endY;
-
-    public Board() {
-        highscores = HighScores.load();
-    }
 
     public void start() {
         state = GameState.IN_GAME;

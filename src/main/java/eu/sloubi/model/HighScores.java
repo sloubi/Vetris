@@ -1,24 +1,32 @@
 package eu.sloubi.model;
 
-import java.io.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import eu.sloubi.App;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 
-public class HighScores implements Serializable, Iterable<Score> {
-    @Serial
-    private static final long serialVersionUID = 8392154074028239629L;
+public class HighScores implements Iterable<Score> {
 
-    private final ArrayList<Score> scores = new ArrayList<>();
-    private static final String HIGHSCORE_FILENAME = "highscore.ser";
+    private List<Score> scores = new ArrayList<>();
+
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public HighScores() {
+        load();
+    }
 
     public void add(Score s) {
         scores.add(s);
         scores.sort(Collections.reverseOrder());
 
-        int keeped = 10;
-        if (scores.size() > keeped)
+        int kept = 10;
+        if (scores.size() > kept)
             scores.remove(scores.size() - 1);
     }
 
@@ -31,27 +39,18 @@ public class HighScores implements Serializable, Iterable<Score> {
         return s.getScore() > getMinScore();
     }
 
-    public static HighScores load() {
-        HighScores highscores = new HighScores();
-
-        File file = new File(HIGHSCORE_FILENAME);
-        if (file.exists()) {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-                highscores = (HighScores) ois.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                throw new IllegalStateException(e);
-            }
+    public void load() {
+        try {
+            scores = objectMapper.readValue(App.prefs.get("highScores", "[]"), new TypeReference<>() {});
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException(e);
         }
-
-        return highscores;
     }
 
     public void save() {
-        File file = new File(HIGHSCORE_FILENAME);
-
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
-            oos.writeObject(this);
-        } catch (IOException e) {
+        try {
+            App.prefs.put("highScores", objectMapper.writeValueAsString(scores));
+        } catch (JsonProcessingException e) {
             throw new IllegalStateException(e);
         }
     }

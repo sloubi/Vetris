@@ -1,11 +1,9 @@
 package eu.sloubi.model;
 
-import java.io.Serial;
-import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-public class Score implements Comparable<Score>, Serializable {
-    @Serial
-    private static final long serialVersionUID = -4401162744040333360L;
+public class Score implements Comparable<Score> {
+
     private int score;
     private int lines;
     private int seconds;
@@ -34,9 +32,14 @@ public class Score implements Comparable<Score>, Serializable {
         return level;
     }
 
+    public int getPiecesDropped() {
+        return piecesDropped;
+    }
+
     /**
      * @return Lines per minute
      */
+    @JsonIgnore
     public int getLPM() {
         return seconds != 0 ? Math.round((float) lines / (float) seconds * 60) : 0;
     }
@@ -44,6 +47,7 @@ public class Score implements Comparable<Score>, Serializable {
     /**
      * @return Tetriminos per minute
      */
+    @JsonIgnore
     public int getTPM() {
         return seconds != 0 ? Math.round((float) piecesDropped / (float) seconds * 60) : 0;
     }
