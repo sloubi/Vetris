@@ -1,7 +1,14 @@
 package eu.sloubi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 
 public class Score implements Comparable<Score> {
@@ -12,8 +19,15 @@ public class Score implements Comparable<Score> {
     private int level = 1;
     private boolean vShapeActive = true;
     private String name;
-    private int piecesDropped = 0;
+    private int droppedPieces = 0;
     private LocalDateTime dateTime;
+
+    @JsonIgnore
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public Score() {
+        objectMapper.registerModule(new JavaTimeModule());
+    }
 
     public int getScore() {
         return score;
@@ -35,8 +49,8 @@ public class Score implements Comparable<Score> {
         return level;
     }
 
-    public int getPiecesDropped() {
-        return piecesDropped;
+    public int getDroppedPieces() {
+        return droppedPieces;
     }
 
     public LocalDateTime getDateTime() {
@@ -56,7 +70,7 @@ public class Score implements Comparable<Score> {
      */
     @JsonIgnore
     public int getTPM() {
-        return seconds != 0 ? Math.round((float) piecesDropped / (float) seconds * 60) : 0;
+        return seconds != 0 ? Math.round((float) droppedPieces / (float) seconds * 60) : 0;
     }
 
     public boolean isvShapeActive() {
@@ -124,12 +138,16 @@ public class Score implements Comparable<Score> {
         return false;
     }
 
-    public void addPieceDropped() {
-        piecesDropped++;
+    public void addDroppedPiece() {
+        droppedPieces++;
     }
 
     @Override
     public String toString() {
         return name + " : " + score;
+    }
+
+    public void saveOnWeb() {
+        WebHighScores.saveScore(this);
     }
 }

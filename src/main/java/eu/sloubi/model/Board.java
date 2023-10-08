@@ -38,7 +38,7 @@ public class Board implements ActionListener {
     private final List<BoardListener> listeners = new ArrayList<>();
     private final Timer gameTimer = new Timer(1000, this);
     private final Timer clockTimer = new Timer(1000, this);
-    private final HighScores highscores = new HighScores();
+    private final LocalHighScores highscores = new LocalHighScores();
     private boolean holdLocked = false;
     private boolean vShapeActive = App.prefs.getBoolean("vshape", true);
 
@@ -137,7 +137,7 @@ public class Board implements ActionListener {
 
         // Si le prochain déplacement est impossible, on est en bas
         if (!shapeCanMove(0, 1)) {
-            score.addPieceDropped();
+            score.addDroppedPiece();
 
             for (BoardListener listener : listeners) {
                 listener.userEvent("bottom");
@@ -496,7 +496,7 @@ public class Board implements ActionListener {
         return nextShapes.isEmpty() ? null : nextShapes.get(index);
     }
 
-    public HighScores getHighscores() {
+    public LocalHighScores getHighscores() {
         return highscores;
     }
 

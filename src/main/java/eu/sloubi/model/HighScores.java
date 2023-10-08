@@ -1,10 +1,7 @@
 package eu.sloubi.model;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import eu.sloubi.App;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,14 +9,17 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class HighScores implements Iterable<Score> {
+public abstract class HighScores implements Iterable<Score> {
 
-    private List<Score> scores = new ArrayList<>();
+    protected List<Score> scores = new ArrayList<>();
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    protected static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public HighScores() {
+    static {
         objectMapper.registerModule(new JavaTimeModule());
+    }
+
+    protected HighScores() {
         load();
     }
 
@@ -41,22 +41,6 @@ public class HighScores implements Iterable<Score> {
         return s.getScore() > getMinScore();
     }
 
-    public void load() {
-        try {
-            scores = objectMapper.readValue(App.prefs.get("highScores", "[]"), new TypeReference<>() {});
-        } catch (JsonProcessingException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    public void save() {
-        try {
-            App.prefs.put("highScores", objectMapper.writeValueAsString(scores));
-        } catch (JsonProcessingException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
     @Override
     public Iterator<Score> iterator() {
         return scores.iterator();
@@ -69,4 +53,7 @@ public class HighScores implements Iterable<Score> {
     public Score get(int index) {
         return scores.get(index);
     }
+
+    abstract void load();
+
 }
