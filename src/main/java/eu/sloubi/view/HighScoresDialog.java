@@ -9,7 +9,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.WindowEvent;
+import java.awt.event.KeyEvent;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
@@ -27,39 +27,25 @@ public class HighScoresDialog extends JDialog {
         labelWeb.setForeground(new Color(228, 80, 0));
         labelWeb.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JButton closeButton = new JButton("X");
-        closeButton.setBackground(new Color(12, 12, 12));
-        closeButton.setForeground(Color.white);
-        closeButton.setFocusPainted(false);
-        closeButton.setBorderPainted(false);
-        closeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        closeButton.getModel().addChangeListener(e -> {
-            ButtonModel buttonModel = (ButtonModel) e.getSource();
-            if (buttonModel.isRollover()) {
-                closeButton.setBackground(new Color(168, 21, 21));
-            } else {
-                closeButton.setBackground(new Color(12, 12, 12));
-            }
-        });
-        closeButton.addActionListener(e -> dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING)));
-
-        JPanel closePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        closePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        closePanel.setOpaque(false);
-        closePanel.add(closeButton);
+        JPanel contentPanel = new JPanel();
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 20));
+        contentPanel.setOpaque(false);
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.add(labelLocal);
+        contentPanel.add(createTable(localHighScores));
+        contentPanel.add(Box.createVerticalStrut(30));
+        contentPanel.add(labelWeb);
+        contentPanel.add(createTable(new WebHighScores()));
 
         BackgroundContainer main = new BackgroundContainer();
-        main.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.white),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
+        main.setBorder(BorderFactory.createLineBorder(Color.white));
         main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
-        main.add(closePanel);
-        main.add(labelLocal);
-        main.add(createTable(localHighScores));
-        main.add(Box.createVerticalStrut(30));
-        main.add(labelWeb);
-        main.add(createTable(new WebHighScores()));
+        main.add(new ClosePanel(this));
+        main.add(contentPanel);
+
+        getRootPane().registerKeyboardAction(e -> dispose(),
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         getContentPane().add(main);
         setTitle("High Scores");
@@ -108,7 +94,7 @@ public class HighScoresDialog extends JDialog {
 class HighScoresModel extends AbstractTableModel {
 
     private final transient HighScores hs;
-    private final String[] headers = {"Name", "Score", "Lines", "Level", "Time", "LPM", "TPM", "V Piece", "Date"};
+    private final String[] headers = { "Name", "Score", "Lines", "Level", "Time", "LPM", "TPM", "V Piece", "Date" };
 
     public HighScoresModel(HighScores hs) {
         this.hs = hs;
@@ -140,8 +126,7 @@ class HighScoresModel extends AbstractTableModel {
             case 5 -> hs.get(rowIndex).getLPM();
             case 6 -> hs.get(rowIndex).getTPM();
             case 7 -> hs.get(rowIndex).isvShapeActive() ? "yes" : "no";
-            case 8 ->
-                    hs.get(rowIndex).getDateTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL, FormatStyle.MEDIUM));
+            case 8 -> hs.get(rowIndex).getDateTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL, FormatStyle.MEDIUM));
             default -> null;
         };
     }

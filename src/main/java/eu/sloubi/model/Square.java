@@ -26,9 +26,9 @@ public class Square {
 
     public Color getColor() {
         Color c = color;
-        if (state == State.EMPTY)
+        if (state == State.EMPTY) {
             c = new Color(33, 33, 33);
-        else if (state == State.END) {
+        } else if (state == State.END) {
             c = new Color(50, 50, 50);
         }
         return c;

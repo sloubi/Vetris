@@ -9,10 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public class MenuPanel extends RoundedPanel implements ActionListener {
-    private final ArrayList<MenuListener> listeners = new ArrayList<>();
+    private final transient MenuListener listener;
     private final JButton game = new JButton("Resume");
     private final JButton options = new JButton("Options");
     private final JButton highscores = new JButton("HighScores");
@@ -21,7 +20,9 @@ public class MenuPanel extends RoundedPanel implements ActionListener {
     private final JButton quit = new JButton("Quit");
     private Board.GameState state = Board.GameState.PAUSED;
 
-    public MenuPanel() {
+    public MenuPanel(MenuListener listener) {
+        this.listener = listener;
+
         setLayout(new GridLayout(6, 1, 0, 10));
         setOpaque(false);
 
@@ -75,39 +76,24 @@ public class MenuPanel extends RoundedPanel implements ActionListener {
         button.addActionListener(this);
     }
 
-    public void addListener(MenuListener listener) {
-        listeners.add(listener);
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(game)) {
-            for (MenuListener listener : listeners) {
-                if (state == Board.GameState.PAUSED)
-                    listener.resumeClicked();
-                else
-                    listener.newGameClicked();
+            if (state == Board.GameState.PAUSED) {
+                listener.resumeClicked();
+            } else {
+                listener.newGameClicked();
             }
         } else if (e.getSource().equals(quit)) {
-            for (MenuListener listener : listeners) {
-                listener.quitClicked();
-            }
+            listener.quitClicked();
         } else if (e.getSource().equals(options)) {
-            for (MenuListener listener : listeners) {
-                listener.optionsClicked();
-            }
+            listener.optionsClicked();
         } else if (e.getSource().equals(highscores)) {
-            for (MenuListener listener : listeners) {
-                listener.highScoresClicked();
-            }
+            listener.highScoresClicked();
         } else if (e.getSource().equals(howToPlay)) {
-            for (MenuListener listener : listeners) {
-                listener.howToPlayClicked();
-            }
+            listener.howToPlayClicked();
         } else if (e.getSource().equals(about)) {
-            for (MenuListener listener : listeners) {
-                listener.aboutClicked();
-            }
+            listener.aboutClicked();
         }
     }
 

@@ -2,13 +2,16 @@ package eu.sloubi.model;
 
 import eu.sloubi.App;
 
-import javax.swing.Timer;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.*;
-
+import java.util.Random;
 
 public class Board implements ActionListener {
 
@@ -193,8 +196,9 @@ public class Board implements ActionListener {
      */
     private boolean isFullLine(int y) {
         for (int x = 0; x < getWidth(); x++) {
-            if (map[y][x].getState() == Square.State.EMPTY)
+            if (map[y][x].getState() == Square.State.EMPTY) {
                 return false;
+            }
         }
         return true;
     }
@@ -429,12 +433,13 @@ public class Board implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(gameTimer))
+        if (e.getSource().equals(gameTimer)) {
             step();
-        else if (e.getSource().equals(endTimer))
+        } else if (e.getSource().equals(endTimer)) {
             fillBoard();
-        else if (e.getSource().equals(clockTimer))
+        } else if (e.getSource().equals(clockTimer)) {
             clock();
+        }
     }
 
     private void clock() {

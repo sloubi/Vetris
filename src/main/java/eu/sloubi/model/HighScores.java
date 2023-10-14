@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-
 public abstract class HighScores implements Iterable<Score> {
 
     protected List<Score> scores = new ArrayList<>();
@@ -28,12 +27,15 @@ public abstract class HighScores implements Iterable<Score> {
         scores.sort(Collections.reverseOrder());
 
         int kept = 10;
-        if (scores.size() > kept)
+        if (scores.size() > kept) {
             scores.remove(scores.size() - 1);
+        }
     }
 
     public int getMinScore() {
-        if (scores.isEmpty()) return 0;
+        if (scores.isEmpty()) {
+            return 0;
+        }
         return scores.get(scores.size() - 1).getScore();
     }
 

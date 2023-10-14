@@ -49,8 +49,9 @@ public class Shape {
 
     public void rotate(boolean clockwise) {
         // Pas de rotation possible
-        if (tetromino.possibleWays == 1)
+        if (tetromino.possibleWays == 1) {
             return;
+        }
 
         final int M = getHeight();
         final int N = getWidth();

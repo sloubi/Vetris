@@ -2,11 +2,16 @@ package eu.sloubi;
 
 import eu.sloubi.view.MainFrame;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.*;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.prefs.Preferences;
 
 public class App {
@@ -30,6 +35,8 @@ public class App {
         InputStream is2 = MainFrame.class.getResourceAsStream("/fonts/Anton.ttf");
 
         try {
+            assert is1 != null;
+            assert is2 != null;
             gameFont = Font.createFont(Font.TRUETYPE_FONT, is1);
             barFont = Font.createFont(Font.TRUETYPE_FONT, is2);
         } catch (FontFormatException | IOException e) {
@@ -57,7 +64,8 @@ public class App {
     }
 
     public static void initClips() {
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(MainFrame.class.getResourceAsStream("/sounds/tetris-ragtime.wav"));
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(
+                Objects.requireNonNull(MainFrame.class.getResourceAsStream("/sounds/tetris-ragtime.wav")));
         try {
             AudioInputStream ais = AudioSystem.getAudioInputStream(bufferedInputStream);
             gameClip.open(ais);
@@ -78,7 +86,8 @@ public class App {
     }
 
     private static void initClip(Clip clip, String filename) {
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(MainFrame.class.getResourceAsStream(filename));
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(
+                Objects.requireNonNull(MainFrame.class.getResourceAsStream(filename)));
         try {
             AudioInputStream ais = AudioSystem.getAudioInputStream(bufferedInputStream);
             clip.open(ais);

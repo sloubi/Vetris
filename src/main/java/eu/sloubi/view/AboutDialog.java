@@ -1,11 +1,12 @@
 package eu.sloubi.view;
 
+import eu.sloubi.App;
 import eu.sloubi.model.Shape;
 import eu.sloubi.model.Tetromino;
-import eu.sloubi.App;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -17,25 +18,31 @@ public class AboutDialog extends JDialog {
     JLabel link;
     ShapePanel icon;
     JPanel textPane;
-    JPanel buttonPane;
 
     public AboutDialog() {
         initLink();
         initIcon();
         initTextPane();
-        initButtonPane();
 
-        setLayout(new BorderLayout());
-        add(icon, BorderLayout.WEST);
-        add(textPane, BorderLayout.CENTER);
-        add(buttonPane, BorderLayout.PAGE_END);
+        BackgroundContainer main = new BackgroundContainer();
+        main.setBorder(BorderFactory.createLineBorder(Color.white));
+        main.setLayout(new BorderLayout());
+        main.add(new ClosePanel(this), BorderLayout.NORTH);
+        main.add(icon, BorderLayout.WEST);
+        main.add(textPane, BorderLayout.CENTER);
 
+        getRootPane().registerKeyboardAction(e -> dispose(),
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        getContentPane().add(main);
         setTitle("About");
-        setModalityType(ModalityType.APPLICATION_MODAL);
+        setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setResizable(true);
+        setUndecorated(true);
         setSize(300, 200);
-        setResizable(false);
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 
@@ -46,7 +53,7 @@ public class AboutDialog extends JDialog {
     private void initLink() {
         link = new JLabel("<html><u>sloubi.eu</u></html>");
         link.setFont(link.getFont().deriveFont(Font.PLAIN));
-        link.setForeground(Color.blue);
+        link.setForeground(Color.white);
         link.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         link.addMouseListener(new MouseAdapter() {
@@ -64,6 +71,7 @@ public class AboutDialog extends JDialog {
     private void initTextPane() {
         textPane = new JPanel();
         textPane.setLayout(new GridBagLayout());
+        textPane.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = GridBagConstraints.RELATIVE;
@@ -72,13 +80,17 @@ public class AboutDialog extends JDialog {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 20, 0, 0);
 
-
+        Font font = App.gameFont.deriveFont(24f);
         JLabel title = new JLabel("Vetris " + App.VERSION);
+        title.setFont(font);
+        title.setForeground(new Color(228, 80, 0));
         textPane.add(title, gbc);
 
         JPanel authorPane = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        authorPane.setOpaque(false);
         JLabel author = new JLabel("By Sloubi, ");
         author.setFont(author.getFont().deriveFont(Font.PLAIN));
+        author.setForeground(Color.white);
         authorPane.add(author);
         authorPane.add(link);
 
@@ -87,18 +99,8 @@ public class AboutDialog extends JDialog {
 
         JLabel createdAt = new JLabel("Created in September 2020");
         createdAt.setFont(createdAt.getFont().deriveFont(Font.PLAIN));
-        createdAt.setForeground(Color.darkGray);
+        createdAt.setForeground(Color.gray);
         textPane.add(createdAt, gbc);
     }
 
-    private void initButtonPane() {
-        JButton close = new JButton("Close");
-        close.addActionListener(event -> dispose());
-
-        buttonPane = new JPanel();
-        buttonPane.setLayout(new BoxLayout(buttonPane, BoxLayout.LINE_AXIS));
-        buttonPane.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-        buttonPane.add(Box.createHorizontalGlue());
-        buttonPane.add(close);
-    }
 }

@@ -1,15 +1,15 @@
 package eu.sloubi.view;
 
-import eu.sloubi.model.Square;
 import eu.sloubi.App;
 import eu.sloubi.model.Board;
+import eu.sloubi.model.Square;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class BoardPanel extends JPanel implements SquareDrawer {
 
-    private final Board board;
+    private final transient Board board;
     private int squareSize;
     private int squareBorder;
 

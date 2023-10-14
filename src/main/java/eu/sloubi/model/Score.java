@@ -74,7 +74,9 @@ public class Score implements Comparable<Score> {
 
     public void setName(String name) {
         name = name.trim();
-        if (name.isEmpty()) name = "Anonymous";
+        if (name.isEmpty()) {
+            name = "Anonymous";
+        }
         this.name = name;
     }
 
@@ -92,8 +94,12 @@ public class Score implements Comparable<Score> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Score score1 = (Score) o;
 
@@ -111,10 +117,13 @@ public class Score implements Comparable<Score> {
     }
 
     public void addLines(int nbOfLines) {
-        if (nbOfLines == 1) score += 100 * level;
-        else if (nbOfLines == 2) score += 300 * level;
-        else if (nbOfLines == 3) score += 500 * level;
-        else if (nbOfLines == 4) score += 800 * level; // Tetris !
+        switch (nbOfLines) {
+            case 1 -> score += 100 * level;
+            case 2 -> score += 300 * level;
+            case 3 -> score += 500 * level;
+            case 4 -> score += 800 * level; // Tetris !
+            default -> throw new IllegalStateException("Wtf just happened");
+        }
 
         lines += nbOfLines;
     }

@@ -1,13 +1,13 @@
 package eu.sloubi.view;
 
-import eu.sloubi.model.Shape;
 import eu.sloubi.App;
+import eu.sloubi.model.Shape;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ShapePanel extends JPanel implements SquareDrawer {
-    private Shape shape;
+    private transient Shape shape;
     private final int squareSize;
     private final int borderSize;
 
@@ -27,7 +27,9 @@ public class ShapePanel extends JPanel implements SquareDrawer {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if (shape == null) return;
+        if (shape == null) {
+            return;
+        }
 
         // Dimension de la pièce
         int shapeWidth = shape.getWidth() * squareSize + borderSize * shape.getWidth();

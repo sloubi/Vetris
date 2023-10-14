@@ -1,9 +1,9 @@
 package eu.sloubi.view;
 
-import eu.sloubi.model.BoardListener;
-import eu.sloubi.model.Score;
 import eu.sloubi.App;
 import eu.sloubi.model.Board;
+import eu.sloubi.model.BoardListener;
+import eu.sloubi.model.Score;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class RightSidebar extends JPanel implements BoardListener {
 
-    private final Board board;
+    private final transient Board board;
     private final JLabel score = new JLabel("0");
     private final JLabel lines = new JLabel("0");
     private final JLabel level = new JLabel("1");
@@ -100,12 +100,12 @@ public class RightSidebar extends JPanel implements BoardListener {
 
     @Override
     public void boardChanged() {
-
+        // Not needed
     }
 
     @Override
     public void holdChanged() {
-
+        // Not needed
     }
 
     @Override
@@ -118,6 +118,7 @@ public class RightSidebar extends JPanel implements BoardListener {
 
     @Override
     public void stateChanged() {
+        // Not needed
     }
 
     @Override
@@ -135,11 +136,12 @@ public class RightSidebar extends JPanel implements BoardListener {
 
     @Override
     public void newHighScore(Score score) {
+        // Not needed
     }
 
     @Override
     public void userEvent(String event) {
-
+        // Not needed
     }
 }
 

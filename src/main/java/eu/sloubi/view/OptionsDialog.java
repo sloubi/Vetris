@@ -4,9 +4,9 @@ import eu.sloubi.App;
 import eu.sloubi.model.Board;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 public class OptionsDialog extends JDialog {
     private JPanel contentPane;
@@ -14,46 +14,68 @@ public class OptionsDialog extends JDialog {
     private JButton buttonCancel;
     private JSpinner gridSizeSpinner;
     private JSpinner squareSizeSpinner;
-    private JCheckBox reliefOnThePiecesCheckBox;
-    private JCheckBox musicCheckBox;
-    private JCheckBox vPieceCheckBox;
-    private JCheckBox soundEffectsCheckBox;
-    private JCheckBox showTetriminosPerMinuteCheckBox;
-    private JCheckBox showLinesPerMinuteCheckBox;
-    private JCheckBox showSecondsCheckBox;
-    private JCheckBox fullScreenCheckBox;
+    private Checkbox reliefEffectOnTheCheckbox;
+    private Checkbox musicCheckbox;
+    private Checkbox vPieceCheckbox;
+    private Checkbox soundEffectsCheckbox;
+    private Checkbox showTetriminosPerMinuteCheckbox;
+    private Checkbox showLinesPerMinuteCheckbox;
+    private Checkbox showSecondsCheckbox;
+    private Checkbox fullScreenCheckbox;
+    private JPanel gamePanel;
+    private JPanel displayPanel;
+    private JPanel statsPanel;
+    private JLabel dialogTitle;
     private final Board.GameState gameState;
 
     public OptionsDialog(Board.GameState gameState) {
         this.gameState = gameState;
 
-        setContentPane(contentPane);
+        BackgroundContainer main = new BackgroundContainer();
+        main.setBorder(BorderFactory.createLineBorder(Color.white));
+        main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
+        main.add(new ClosePanel(this));
+        main.add(contentPane);
+
+        initTitledPanel();
+        initButtons();
+
+        Font font = App.gameFont.deriveFont(24f);
+        dialogTitle.setFont(font);
+        dialogTitle.setForeground(new Color(228, 80, 0));
+
+        setContentPane(main);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
         gridSizeSpinner.setModel(new SpinnerNumberModel(2, 0, 20, 1));
         squareSizeSpinner.setModel(new SpinnerNumberModel(20, 4, 40, 1));
 
-        buttonOK.addActionListener(e -> onOK());
-
-        buttonCancel.addActionListener(e -> onCancel());
-
-        // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
-
         // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(e -> onCancel(), KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+         getRootPane().registerKeyboardAction(e -> onCancel(),
+            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+            JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         load();
+        setResizable(true);
+        setUndecorated(true);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    private void initTitledPanel() {
+        TitledBorder gametitledBorder = BorderFactory.createTitledBorder("Game");
+        gametitledBorder.setTitleColor(Color.white);
+        gamePanel.setBorder(gametitledBorder);
+
+        TitledBorder statsTitledBorder = BorderFactory.createTitledBorder("Statistics");
+        statsTitledBorder.setTitleColor(Color.white);
+        statsPanel.setBorder(statsTitledBorder);
+
+        TitledBorder displayTitledBorder = BorderFactory.createTitledBorder("Display");
+        displayTitledBorder.setTitleColor(Color.white);
+        displayPanel.setBorder(displayTitledBorder);
     }
 
     private void onOK() {
@@ -66,38 +88,59 @@ public class OptionsDialog extends JDialog {
     }
 
     private void load() {
-        musicCheckBox.setSelected(App.prefs.getBoolean("music", true));
-        soundEffectsCheckBox.setSelected(App.prefs.getBoolean("sound", true));
-        vPieceCheckBox.setSelected(App.prefs.getBoolean("vshape", true));
-        reliefOnThePiecesCheckBox.setSelected(App.prefs.getBoolean("reliefOnThePieces", true));
+        musicCheckbox.setSelected(App.prefs.getBoolean("music", true));
+        soundEffectsCheckbox.setSelected(App.prefs.getBoolean("sound", true));
+        vPieceCheckbox.setSelected(App.prefs.getBoolean("vshape", true));
+        reliefEffectOnTheCheckbox.setSelected(App.prefs.getBoolean("reliefOnThePieces", true));
         gridSizeSpinner.setValue(App.prefs.getInt("gridSize", 2));
         squareSizeSpinner.setValue(App.prefs.getInt("squareSize", 20));
-        showTetriminosPerMinuteCheckBox.setSelected(App.prefs.getBoolean("showTetriminosPerMinute", false));
-        showLinesPerMinuteCheckBox.setSelected(App.prefs.getBoolean("showLinesPerMinute", false));
-        showSecondsCheckBox.setSelected(App.prefs.getBoolean("showSeconds", false));
-        fullScreenCheckBox.setSelected(App.prefs.getBoolean("fullScreen", false));
+        showTetriminosPerMinuteCheckbox.setSelected(App.prefs.getBoolean("showTetriminosPerMinute", false));
+        showLinesPerMinuteCheckbox.setSelected(App.prefs.getBoolean("showLinesPerMinute", false));
+        showSecondsCheckbox.setSelected(App.prefs.getBoolean("showSeconds", false));
+        fullScreenCheckbox.setSelected(App.prefs.getBoolean("fullScreen", false));
 
-        if (gameState == Board.GameState.IN_GAME)
-            vPieceCheckBox.setEnabled(false);
+        if (gameState == Board.GameState.IN_GAME) {
+            vPieceCheckbox.setEnabled(false);
+        }
     }
 
     private void save() {
-        if (App.prefs.getBoolean("fullScreen", false) != fullScreenCheckBox.isSelected()) {
+        if (App.prefs.getBoolean("fullScreen", false) != fullScreenCheckbox.isSelected()) {
             JOptionPane.showMessageDialog(null,
                     "You need to restart the game to apply your modification.",
                     "Full screen",
                     JOptionPane.INFORMATION_MESSAGE);
         }
 
-        App.prefs.putBoolean("music", musicCheckBox.isSelected());
-        App.prefs.putBoolean("sound", soundEffectsCheckBox.isSelected());
-        App.prefs.putBoolean("vshape", vPieceCheckBox.isSelected());
-        App.prefs.putBoolean("reliefOnThePieces", reliefOnThePiecesCheckBox.isSelected());
+        App.prefs.putBoolean("music", musicCheckbox.isSelected());
+        App.prefs.putBoolean("sound", soundEffectsCheckbox.isSelected());
+        App.prefs.putBoolean("vshape", vPieceCheckbox.isSelected());
+        App.prefs.putBoolean("reliefOnThePieces", reliefEffectOnTheCheckbox.isSelected());
         App.prefs.putInt("gridSize", (Integer) gridSizeSpinner.getValue());
         App.prefs.putInt("squareSize", (Integer) squareSizeSpinner.getValue());
-        App.prefs.putBoolean("showTetriminosPerMinute", showTetriminosPerMinuteCheckBox.isSelected());
-        App.prefs.putBoolean("showLinesPerMinute", showLinesPerMinuteCheckBox.isSelected());
-        App.prefs.putBoolean("showSeconds", showSecondsCheckBox.isSelected());
-        App.prefs.putBoolean("fullScreen", fullScreenCheckBox.isSelected());
+        App.prefs.putBoolean("showTetriminosPerMinute", showTetriminosPerMinuteCheckbox.isSelected());
+        App.prefs.putBoolean("showLinesPerMinute", showLinesPerMinuteCheckbox.isSelected());
+        App.prefs.putBoolean("showSeconds", showSecondsCheckbox.isSelected());
+        App.prefs.putBoolean("fullScreen", fullScreenCheckbox.isSelected());
     }
+
+    public void initButtons() {
+        buttonOK.setOpaque(true);
+        buttonOK.setBackground(Color.black);
+        buttonOK.setForeground(Color.white);
+        buttonOK.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(228, 80, 0)),
+                BorderFactory.createEmptyBorder(6, 6, 6, 6)));
+
+        buttonCancel.setOpaque(true);
+        buttonCancel.setBackground(Color.black);
+        buttonCancel.setForeground(Color.white);
+        buttonCancel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(228, 80, 0)),
+                BorderFactory.createEmptyBorder(6, 15, 6, 15)));
+
+        buttonOK.addActionListener(e -> onOK());
+        buttonCancel.addActionListener(e -> onCancel());
+    }
+
 }

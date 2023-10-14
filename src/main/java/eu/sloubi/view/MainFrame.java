@@ -1,22 +1,25 @@
 package eu.sloubi.view;
 
-import eu.sloubi.model.BoardListener;
-import eu.sloubi.model.Score;
 import eu.sloubi.App;
 import eu.sloubi.model.Board;
+import eu.sloubi.model.BoardListener;
+import eu.sloubi.model.Score;
 
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
 
-public class MainFrame extends JFrame implements KeyListener, BoardListener, ActionListener, MenuListener {
+public class MainFrame extends JFrame implements KeyListener, BoardListener, MenuListener {
 
     private final Board board = new Board();
     private BoardPanel boardPanel;
     private RoundedPanel boardPanelContainer = new RoundedPanel();
-    private final JButton closeButton = new JButton("X");
-    private final MenuPanel menu = new MenuPanel();
+    private final MenuPanel menu = new MenuPanel(this);
     private final RightSidebar rightSidebar = new RightSidebar(board);
     private final LeftSidebar leftSidebar = new LeftSidebar(board);
 
@@ -51,51 +54,24 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         mainPanel.add(rightSidebar, BorderLayout.EAST);
         mainPanel.add(leftSidebar, BorderLayout.WEST);
 
-        initCloseButton();
-        JPanel closePanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        closePanel.setOpaque(false);
-        closePanel.add(closeButton);
-
         BackgroundContainer container = new BackgroundContainer();
         container.setLayout(new BorderLayout());
-        container.add(closePanel, BorderLayout.PAGE_START);
+        container.add(new ClosePanel(this), BorderLayout.PAGE_START);
         container.add(mainPanel, BorderLayout.CENTER);
         container.add(new Bottombar(board), BorderLayout.PAGE_END);
 
         setContentPane(container);
     }
 
-    public void initCloseButton() {
-        closeButton.setBackground(new Color(12, 12, 12));
-        closeButton.setForeground(Color.white);
-        closeButton.setFocusPainted(false);
-        closeButton.setBorderPainted(false);
-        closeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        closeButton.getModel().addChangeListener(e -> {
-            ButtonModel model = (ButtonModel) e.getSource();
-            if (model.isRollover()) {
-                closeButton.setBackground(new Color(168, 21, 21));
-            } else {
-                closeButton.setBackground(new Color(12, 12, 12));
-            }
-        });
-    }
-
     public void eventHandling() {
         setFocusable(true);
         requestFocus();
-
-        closeButton.addActionListener(this);
 
         FrameDragListener frameDragListener = new FrameDragListener(this);
         addMouseListener(frameDragListener);
         addMouseMotionListener(frameDragListener);
 
         addKeyListener(this);
-
-        menu.addListener(this);
-
         board.addListener(this);
     }
 
@@ -103,7 +79,7 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         setTitle("Vetris");
         setResizable(false);
         setUndecorated(true);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         if (App.prefs.getBoolean("fullScreen", false)) {
             setExtendedState(Frame.MAXIMIZED_BOTH);
@@ -144,16 +120,6 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
         if (!App.prefs.getBoolean("fullScreen", false)) {
             pack();
         }
-    }
-
-    /**
-     * Close App
-     *
-     * @param e Event
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        quit();
     }
 
     @Override
@@ -241,7 +207,7 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
                 board.getScore().getScore() + " is a new highscore! What's your name?",
                 "New record!",
                 JOptionPane.INFORMATION_MESSAGE,
-                null,null,
+                null, null,
                 App.prefs.get("name", ""));
 
         if (response != null) {
@@ -341,7 +307,6 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Act
             frame.setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
         }
     }
-
 
 }
 

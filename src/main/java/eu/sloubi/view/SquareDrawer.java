@@ -3,7 +3,8 @@ package eu.sloubi.view;
 import java.awt.*;
 
 public interface SquareDrawer {
-    default void drawSquare(Graphics2D g2, Color squareColor, int squareSize, int borderSize, int offsetX, int offsetY, int x, int y, boolean gradient) {
+    default void drawSquare(Graphics2D g2, Color squareColor, int squareSize, int borderSize, int offsetX, int offsetY, int x, int y,
+            boolean gradient) {
         final int x1 = offsetX + x * squareSize + borderSize * x;
         final int y1 = offsetY + y * squareSize + borderSize * y;
 
