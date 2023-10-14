@@ -126,7 +126,7 @@ class HighScoresModel extends AbstractTableModel {
             case 5 -> hs.get(rowIndex).getLPM();
             case 6 -> hs.get(rowIndex).getTPM();
             case 7 -> hs.get(rowIndex).isvShapeActive() ? "yes" : "no";
-            case 8 -> hs.get(rowIndex).getDateTime().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.FULL, FormatStyle.MEDIUM));
+            case 8 -> hs.get(rowIndex).getRelativeDateTime();
             default -> null;
         };
     }

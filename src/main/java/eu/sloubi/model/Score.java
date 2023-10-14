@@ -3,6 +3,7 @@ package eu.sloubi.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import java.time.LocalDateTime;
 
@@ -153,5 +154,10 @@ public class Score implements Comparable<Score> {
 
     public void saveOnWeb() {
         WebHighScores.saveScore(this);
+    }
+
+    public String getRelativeDateTime() {
+        PrettyTime prettyTime = new PrettyTime();
+        return prettyTime.format(dateTime);
     }
 }
