@@ -28,7 +28,7 @@ public class App {
     public static final Clip clickClip;
 
     public static final Preferences prefs = Preferences.userNodeForPackage(App.class);
-    public static final String VERSION = "1.1";
+    public static final String VERSION = "1.2";
 
     static {
         InputStream is1 = MainFrame.class.getResourceAsStream("/fonts/Comic Kings.ttf");
