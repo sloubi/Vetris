@@ -36,7 +36,7 @@ public class Board implements ActionListener {
     private final Random random = new Random();
     private final List<Shape> nextShapes = new ArrayList<>();
     private final Square[][] map = new Square[22][10];
-    private GameState state = GameState.IN_GAME;
+    private GameState state = GameState.OVER;
     private Score score = new Score();
     private final List<BoardListener> listeners = new ArrayList<>();
     private final Timer gameTimer = new Timer(1000, this);

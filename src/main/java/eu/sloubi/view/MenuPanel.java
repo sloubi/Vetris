@@ -103,7 +103,7 @@ public class MenuPanel extends RoundedPanel implements ActionListener {
             setTitle("PAUSED");
         } else {
             game.setText("New game");
-            setTitle("GAME OVER");
+            setTitle("MENU");
         }
     }
 

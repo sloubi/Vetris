@@ -8,11 +8,7 @@ import eu.sloubi.model.Score;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 public class MainFrame extends JFrame implements KeyListener, BoardListener, MenuListener {
 
@@ -27,7 +23,14 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Men
         initComponents();
         buildFrame();
         eventHandling();
-        board.start();
+
+        if (App.prefs.getBoolean("firstGame", true)) {
+            App.prefs.putBoolean("firstGame", false);
+            showMenu();
+            howToPlayClicked();
+        } else {
+            board.start();
+        }
     }
 
     public void initComponents() {
@@ -95,11 +98,11 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Men
         dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
-    public void pause() {
+    public void showMenu() {
         board.pause();
         boardPanelContainer.setVisible(board.getState() == Board.GameState.IN_GAME);
         menu.setState(board.getState());
-        menu.setVisible(board.getState() == Board.GameState.PAUSED);
+        menu.setVisible(board.getState() != Board.GameState.IN_GAME);
 
         // Seulement quand le plateau de jeu est affiché, sinon la fenêtre se base sur la taille du menu
         if (board.getState() == Board.GameState.IN_GAME) {
@@ -135,17 +138,17 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Men
             board.tryToMove(1, 0);
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
             board.tryToMove(-1, 0);
-        } else if (e.getKeyCode() == KeyEvent.VK_UP) {
+        } else if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_ENTER) {
             board.rotateShape(true);
         } else if (e.getKeyChar() == 'z') {
             board.rotateShape(false);
         } else if (e.getKeyChar() == 'c') {
             board.hold();
-        } else if (e.getKeyCode() == KeyEvent.VK_PAUSE || e.getKeyCode() == KeyEvent.VK_ESCAPE || e.getKeyCode() == KeyEvent.VK_ENTER) {
+        } else if (e.getKeyCode() == KeyEvent.VK_PAUSE || e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             if (board.getState() == Board.GameState.OVER) {
                 board.start();
             } else {
-                pause();
+                showMenu();
             }
         } else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
             board.hardDrop();
@@ -241,7 +244,7 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Men
 
     @Override
     public void resumeClicked() {
-        pause();
+        showMenu();
     }
 
     @Override
@@ -264,7 +267,7 @@ public class MainFrame extends JFrame implements KeyListener, BoardListener, Men
 
     @Override
     public void howToPlayClicked() {
-        new HowToPlayDialog();
+        new HowToPlayDialog(this);
         requestFocus();
     }
 

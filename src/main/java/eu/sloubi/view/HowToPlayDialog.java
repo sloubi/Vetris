@@ -10,11 +10,12 @@ public class HowToPlayDialog extends JDialog {
 
     JPanel contentPanel;
 
-    public HowToPlayDialog() {
+    public HowToPlayDialog(Frame parent) {
         initContentPanel();
 
         Font font = App.gameFont.deriveFont(24f);
         JLabel title = new JLabel("How to play Vetris?");
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
         title.setFont(font);
         title.setForeground(new Color(228, 80, 0));
 
@@ -26,8 +27,8 @@ public class HowToPlayDialog extends JDialog {
         main.add(contentPanel);
 
         getRootPane().registerKeyboardAction(e -> dispose(),
-            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-            JComponent.WHEN_IN_FOCUSED_WINDOW);
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         getContentPane().add(main);
         setTitle("How to play?");
@@ -36,8 +37,8 @@ public class HowToPlayDialog extends JDialog {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(true);
         setUndecorated(true);
-        setLocationRelativeTo(null);
-        setSize(400, 300);
+        setLocationRelativeTo(parent);
+        setSize(400, 430);
         setVisible(true);
     }
 
@@ -48,14 +49,16 @@ public class HowToPlayDialog extends JDialog {
                 This special piece can't rotate.<br>
                 <br>
                 <b>Keys:</b><br>
-                <kbd>Escape</kbd>: Pause<br>
-                <kbd>C</kbd>: Hold<br>
-                <kbd>Space</kbd>: Hard drop<br>
-                <kbd>Down</kbd>: Soft drop<br>
-                <kbd>Up</kbd>: Rotate right<br>
-                <kbd>Z</kbd>: Rotate left<br>
-                <kbd>Left</kbd>: Move left<br>
-                <kbd>Right</kbd>: Move right
+                <table>
+                <tr><td><b><kbd>Escape</kbd></b></td><td>Pause</td></tr>
+                <tr><td><kbd>C</kbd></td><td>Hold</td></tr>
+                <tr><td><kbd><b>Space</b></kbd></td><td>Hard drop</td></tr>
+                <tr><td><kbd><b>Down</b></kbd></td><td>Soft drop</td></tr>
+                <tr><td><kbd><b>Up / Enter</b></kbd></td><td>Rotate right</td></tr>
+                <tr><td><kbd><b>Z</b></kbd></td><td>Rotate left</td></tr>
+                <tr><td><kbd><b>Left</b></kbd></td><td>Move left</td></tr>
+                <tr><td><kbd><b>Right</b></kbd></td><td>Move right</td></tr>
+                </table>
                 </html>""");
         text.setFont(text.getFont().deriveFont(Font.PLAIN));
         text.setForeground(Color.white);
